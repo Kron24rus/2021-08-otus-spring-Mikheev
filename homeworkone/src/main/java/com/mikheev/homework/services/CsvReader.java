@@ -1,8 +1,10 @@
 package com.mikheev.homework.services;
 
+import com.mikheev.homework.model.Question;
+
 import java.util.List;
 
 public interface CsvReader {
 
-    List<String[]> readAllLines(String csvFilePath);
+    List<Question> loadCsvToSurvey(String csvFilePath);
 }
