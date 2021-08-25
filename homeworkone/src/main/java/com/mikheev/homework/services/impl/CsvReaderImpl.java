@@ -1,10 +1,9 @@
 package com.mikheev.homework.services.impl;
 
+import com.mikheev.homework.exceptions.SurveyException;
 import com.mikheev.homework.services.CsvReader;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -14,8 +13,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 public class CsvReaderImpl implements CsvReader {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CsvReaderImpl.class);
 
     public CsvReaderImpl() {
     }
@@ -30,8 +27,7 @@ public class CsvReaderImpl implements CsvReader {
             csvReader.close();
             return result;
         } catch (IOException | CsvException e) {
-            LOGGER.error("Error during reading csv file with file path: {}", csvFilePath);
+            throw new SurveyException("Error during reading csv file with file path: " + csvFilePath, e);
         }
-        return null;
     }
 }

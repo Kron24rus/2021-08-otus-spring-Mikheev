@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,7 +43,7 @@ public class SurveyServiceImplTest {
 
     @Test
     void checkBrokenCsvResultParsing() {
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> surveyServiceBroken.run());
-        verify(ioService, times(0)).write(anyString());
+        surveyServiceBroken.run();
+        verify(ioService, times(1)).write(anyString());
     }
 }
