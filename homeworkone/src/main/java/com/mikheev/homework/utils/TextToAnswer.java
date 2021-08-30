@@ -8,7 +8,8 @@ import com.opencsv.exceptions.CsvDataTypeMismatchException;
 public class TextToAnswer extends AbstractCsvConverter {
 
     @Override
-    public Object convertToRead(String answerValue) throws CsvDataTypeMismatchException, CsvConstraintViolationException {
+    public Object convertToRead(String answerValue)
+            throws CsvDataTypeMismatchException, CsvConstraintViolationException {
         Answer answer = new Answer();
         answer.setAnswer(answerValue);
         return answer;

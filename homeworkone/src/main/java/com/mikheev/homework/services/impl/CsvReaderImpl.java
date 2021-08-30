@@ -7,11 +7,13 @@ import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+@Service
 public class CsvReaderImpl implements CsvReader {
 
     public CsvReaderImpl() {
