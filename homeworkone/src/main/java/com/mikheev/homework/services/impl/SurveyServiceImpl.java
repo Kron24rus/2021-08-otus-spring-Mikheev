@@ -15,7 +15,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Service
@@ -66,9 +65,9 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     private UserSurvey createUserSurvey() {
-        ioService.write(LocalizationUtils.getLocalizedMessage(messageSource, REQUEST_USER_FIRSTNAME, Locale.US) + " ");
+        ioService.write(LocalizationUtils.getLocalizedMessage(messageSource, REQUEST_USER_FIRSTNAME) + " ");
         String userFirstName = ioService.readFromConsole();
-        ioService.write(LocalizationUtils.getLocalizedMessage(messageSource, REQUEST_USER_LASTNAME, Locale.UK) + " ");
+        ioService.write(LocalizationUtils.getLocalizedMessage(messageSource, REQUEST_USER_LASTNAME) + " ");
         String userLastName = ioService.readFromConsole();
         return new UserSurvey(userFirstName, userLastName);
     }
