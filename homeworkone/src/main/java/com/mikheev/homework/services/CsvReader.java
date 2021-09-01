@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CsvReader {
 
-    List<Question> loadCsvToSurvey(String csvFilePath);
+    List<Question> loadCsvToSurvey(String defaultQuestionsPath, List<String> localizedQuestionsPaths);
 }

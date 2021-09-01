@@ -1,16 +1,15 @@
 package com.mikheev.homework;
 
 import com.mikheev.homework.services.SurveyService;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 
-@ComponentScan
-@Configuration
+@SpringBootApplication
 public class Main {
 
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
+        ApplicationContext context = SpringApplication.run(Main.class, args);
         SurveyService surveyService = context.getBean(SurveyService.class);
         surveyService.run();
     }

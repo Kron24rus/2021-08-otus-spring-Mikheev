@@ -1,6 +1,6 @@
 question,answers,correctAnswer
-question number one,ans1|ans2|ans3,ans1
-question number two,ans1|ans2|ans3,ans2
-question number 3,ans1|ans2|ans3,ans3
-question 4,ans1|ans2|ans3,ans1
+question number one?,ans1|ans2|ans3,ans1
+question number two?,ans1|ans2|ans3,ans2
+question number 3?,ans1|ans2|ans3,ans3
+question 4?,ans1|ans2|ans3,ans1
 is this question five?,ans1|ans2|ans3,ans3

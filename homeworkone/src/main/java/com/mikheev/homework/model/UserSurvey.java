@@ -1,6 +1,5 @@
 package com.mikheev.homework.model;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
