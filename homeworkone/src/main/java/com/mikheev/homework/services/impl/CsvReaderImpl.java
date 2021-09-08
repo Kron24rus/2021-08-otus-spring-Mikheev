@@ -24,15 +24,12 @@ public class CsvReaderImpl implements CsvReader {
     @Override
     public List<Question> loadCsvToSurvey(String defaultQuestionsPath, List<String> localizedQuestionsPaths) {
         String csvFilePath = getCSVPathForUserLocale(defaultQuestionsPath, localizedQuestionsPaths);
-        try {
-            Resource resource = new ClassPathResource(csvFilePath);
-            InputStream csvResourceStream = resource.getInputStream();
-            CSVReader csvReader = new CSVReader(new InputStreamReader(csvResourceStream));
-            List<Question> survey = new CsvToBeanBuilder<Question>(csvReader).withType(Question.class)
+        Resource resource = new ClassPathResource(csvFilePath);
+        try (InputStream csvResourceStream = resource.getInputStream();
+             CSVReader csvReader = new CSVReader(new InputStreamReader(csvResourceStream))) {
+            return new CsvToBeanBuilder<Question>(csvReader).withType(Question.class)
                     .build()
                     .parse();
-            csvReader.close();
-            return survey;
         } catch (Exception e) {
             throw new SurveyException("Error during reading csv file with file path: " + csvFilePath, e);
         }
