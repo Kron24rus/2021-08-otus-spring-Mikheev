@@ -3,11 +3,15 @@ package com.mikheev.homework.model;
 import com.mikheev.homework.utils.TextToAnswer;
 import com.opencsv.bean.CsvBindAndSplitByName;
 import com.opencsv.bean.CsvBindByName;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
 
 @ToString
+@Getter
+@Setter
 public class Question {
 
     @CsvBindByName(required = true)
@@ -18,28 +22,4 @@ public class Question {
 
     @CsvBindByName(required = true)
     private String correctAnswer;
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
 }
