@@ -6,44 +6,34 @@ import com.mikheev.homework.model.Question;
 import com.mikheev.homework.model.UserSurvey;
 import com.mikheev.homework.services.CsvReader;
 import com.mikheev.homework.services.IOService;
+import com.mikheev.homework.services.LocalizationService;
 import com.mikheev.homework.services.SurveyService;
-import com.mikheev.homework.utils.LocalizationUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
+@Slf4j
 @Service
 @PropertySource("classpath:application.yaml")
 public class SurveyServiceImpl implements SurveyService {
 
-    public static final String REQUEST_USER_FIRSTNAME = "request.user.firstname";
-    public static final String REQUEST_USER_LASTNAME = "request.user.lastname";
-    public static final String REQUEST_USER_ANSWER = "request.user.answer";
-    public static final String SURVEY_RESULT = "survey.result";
-    public static final String RESULT_PASSED = "result.passed";
-    public static final String RESULT_FAILED = "result.failed";
-    public static final String RESULT_SHOW_ANSWER = "result.show.answer";
+    private static final String REQUEST_USER_FIRSTNAME = "request.user.firstname";
+    private static final String REQUEST_USER_LASTNAME = "request.user.lastname";
+    private static final String REQUEST_USER_ANSWER = "request.user.answer";
+    private static final String SURVEY_RESULT = "survey.result";
+    private static final String RESULT_PASSED = "result.passed";
+    private static final String RESULT_FAILED = "result.failed";
+    private static final String RESULT_SHOW_ANSWER = "result.show.answer";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SurveyServiceImpl.class);
-    private CsvReader csvReader;
-    private IOService ioService;
-    private MessageSource messageSource;
-    private SurveyConfiguration surveyConfiguration;
-
-    public SurveyServiceImpl(CsvReader csvReader,
-                             IOService ioService,
-                             MessageSource messageSource,
-                             SurveyConfiguration surveyConfiguration) {
-        this.csvReader = csvReader;
-        this.ioService = ioService;
-        this.messageSource = messageSource;
-        this.surveyConfiguration = surveyConfiguration;
-    }
+    private final CsvReader csvReader;
+    private final IOService ioService;
+    private final SurveyConfiguration surveyConfiguration;
+    private final LocalizationService localizationService;
 
     @Override
     public void run() {
@@ -54,7 +44,7 @@ public class SurveyServiceImpl implements SurveyService {
             runSurvey(surveyQuestions, userSurvey);
             printSurveyResult(userSurvey);
         } catch (SurveyException e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             ioService.write("Error occurred during running application.");
         }
     }
@@ -65,9 +55,9 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     private UserSurvey createUserSurvey() {
-        ioService.write(LocalizationUtils.getLocalizedMessage(messageSource, REQUEST_USER_FIRSTNAME) + " ");
+        ioService.write(localizationService.getLocalizedMessage(REQUEST_USER_FIRSTNAME) + " ");
         String userFirstName = ioService.readFromConsole();
-        ioService.write(LocalizationUtils.getLocalizedMessage(messageSource, REQUEST_USER_LASTNAME) + " ");
+        ioService.write(localizationService.getLocalizedMessage(REQUEST_USER_LASTNAME) + " ");
         String userLastName = ioService.readFromConsole();
         return new UserSurvey(userFirstName, userLastName);
     }
@@ -84,21 +74,21 @@ public class SurveyServiceImpl implements SurveyService {
         StringBuilder questionString = new StringBuilder();
         questionString.append(question.getQuestion()).append("\n");
         question.getAnswers().forEach(answer -> questionString.append(answer.getAnswer()).append("\n"));
-        questionString.append(LocalizationUtils.getLocalizedMessage(messageSource, REQUEST_USER_ANSWER)).append(" ");
+        questionString.append(localizationService.getLocalizedMessage(REQUEST_USER_ANSWER)).append(" ");
         ioService.write(questionString.toString());
     }
 
     private void printSurveyResult(UserSurvey userSurvey) {
-        ioService.write(LocalizationUtils.getLocalizedMessage(messageSource, SURVEY_RESULT,
+        ioService.write(localizationService.getLocalizedMessage(SURVEY_RESULT,
                 new Object[]{userSurvey.getUserFirstName(), userSurvey.getUserLastName(), userSurvey.getResult(),
-                LocalizationUtils.getLocalizedMessage(messageSource,
+                localizationService.getLocalizedMessage(
                         (userSurvey.getResult() >= surveyConfiguration.getRequiredAnswers()
                                 ? RESULT_PASSED : RESULT_FAILED))}) + "\n");
 
         for (Map.Entry<Question, String> answer : userSurvey.getUserAnswers().entrySet()) {
             Question question = answer.getKey();
             String userAnswer = answer.getValue();
-            ioService.write(LocalizationUtils.getLocalizedMessage(messageSource, RESULT_SHOW_ANSWER,
+            ioService.write(localizationService.getLocalizedMessage(RESULT_SHOW_ANSWER,
                     new Object[] {question.getQuestion(), question.getCorrectAnswer(), userAnswer}) + "\n");
         }
     }

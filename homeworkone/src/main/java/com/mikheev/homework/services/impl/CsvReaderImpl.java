@@ -18,9 +18,6 @@ import java.util.Locale;
 @Service
 public class CsvReaderImpl implements CsvReader {
 
-    public CsvReaderImpl() {
-    }
-
     @Override
     public List<Question> loadCsvToSurvey(String defaultQuestionsPath, List<String> localizedQuestionsPaths) {
         String csvFilePath = getCSVPathForUserLocale(defaultQuestionsPath, localizedQuestionsPaths);

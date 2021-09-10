@@ -1,10 +1,14 @@
 package com.mikheev.homework.configuration;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Getter
+@Setter
 @Component
 @ConfigurationProperties(prefix = "survey")
 public class SurveyConfiguration {
@@ -14,28 +18,4 @@ public class SurveyConfiguration {
     private List<String> localizedQuestionsPaths;
 
     private int requiredAnswers;
-
-    public String getDefaultQuestionsPath() {
-        return defaultQuestionsPath;
-    }
-
-    public void setDefaultQuestionsPath(String defaultQuestionsPath) {
-        this.defaultQuestionsPath = defaultQuestionsPath;
-    }
-
-    public List<String> getLocalizedQuestionsPaths() {
-        return localizedQuestionsPaths;
-    }
-
-    public void setLocalizedQuestionsPaths(List<String> localizedQuestionsPaths) {
-        this.localizedQuestionsPaths = localizedQuestionsPaths;
-    }
-
-    public int getRequiredAnswers() {
-        return requiredAnswers;
-    }
-
-    public void setRequiredAnswers(int requiredAnswers) {
-        this.requiredAnswers = requiredAnswers;
-    }
 }
