@@ -17,4 +17,14 @@ public class SurveyServiceCommands {
     public void runSurvey() {
         surveyService.run();
     }
+
+    @ShellMethod(value = "Create Survey For User", key = {"create"})
+    public void createUserSurvey() {
+        surveyService.createUserSurvey();
+    }
+
+    @ShellMethod(value = "Print survey results", key = {"printres"})
+    public void printSurveyResults() {
+        surveyService.printSurveyResults();
+    }
 }

@@ -7,16 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.shell.jline.InteractiveShellApplicationRunner;
-import org.springframework.shell.jline.ScriptShellApplicationRunner;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(properties = {
-        InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
-        ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
-})
+@SpringBootTest
 public class SurveyServiceImplTest {
 
     @MockBean
@@ -31,6 +26,8 @@ public class SurveyServiceImplTest {
     @Test
     void checkCorrectCsvResultParsing() {
         when(surveyConfiguration.getDefaultQuestionsPath()).thenReturn("/test-csv/questions-correct.csv");
+        when(ioService.readFromConsole()).thenReturn("userName");
+        surveyServiceCorrect.createUserSurvey();
         surveyServiceCorrect.run();
         verify(ioService, atLeastOnce()).write(anyString());
         verify(ioService, atLeastOnce()).readFromConsole();
@@ -39,8 +36,9 @@ public class SurveyServiceImplTest {
     @Test
     void checkWrongCsvResultParsing() {
         when(surveyConfiguration.getDefaultQuestionsPath()).thenReturn("/test-csv/questions-broken.csv");
+        when(ioService.readFromConsole()).thenReturn("userName");
+        surveyServiceCorrect.createUserSurvey();
         surveyServiceCorrect.run();
         verify(ioService, times(1)).write("Error occurred during running application.");
-        verify(ioService, never()).readFromConsole();
     }
 }

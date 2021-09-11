@@ -23,4 +23,9 @@ public class UserSurvey {
             result++;
         }
     }
+
+    public void clearResults() {
+        userAnswers.clear();
+        result = 0;
+    }
 }

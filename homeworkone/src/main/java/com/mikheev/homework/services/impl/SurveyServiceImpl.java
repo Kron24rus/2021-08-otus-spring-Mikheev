@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -26,6 +27,11 @@ public class SurveyServiceImpl implements SurveyService {
     private static final String REQUEST_USER_LASTNAME = "request.user.lastname";
     private static final String REQUEST_USER_ANSWER = "request.user.answer";
     private static final String SURVEY_RESULT = "survey.result";
+    private static final String SURVEY_CREATED = "survey.created";
+    private static final String SURVEY_NOT_CREATED = "survey.not.created";
+    private static final String SURVEY_ALREADY_CREATED = "survey.already.created";
+    private static final String SURVEY_NOT_COMPLETED = "survey.not.completed";
+    private static final String SURVEY_FINISHED = "survey.finished";
     private static final String RESULT_PASSED = "result.passed";
     private static final String RESULT_FAILED = "result.failed";
     private static final String RESULT_SHOW_ANSWER = "result.show.answer";
@@ -35,17 +41,46 @@ public class SurveyServiceImpl implements SurveyService {
     private final SurveyConfiguration surveyConfiguration;
     private final LocalizationService localizationService;
 
+    private UserSurvey userSurvey;
+
+    @Override
+    public void createUserSurvey() {
+        if (Objects.isNull(userSurvey)) {
+            ioService.write(localizationService.getLocalizedMessage(REQUEST_USER_FIRSTNAME) + " ");
+            String userFirstName = ioService.readFromConsole();
+            ioService.write(localizationService.getLocalizedMessage(REQUEST_USER_LASTNAME) + " ");
+            String userLastName = ioService.readFromConsole();
+            userSurvey = new UserSurvey(userFirstName, userLastName);
+            ioService.write(localizationService.getLocalizedMessage(SURVEY_CREATED) + "\n");
+        } else {
+            ioService.write(localizationService.getLocalizedMessage(SURVEY_ALREADY_CREATED) + "\n");
+        }
+    }
+
     @Override
     public void run() {
         List<Question> surveyQuestions;
         try {
-            surveyQuestions = loadSurveyQuestions();
-            UserSurvey userSurvey = createUserSurvey();
-            runSurvey(surveyQuestions, userSurvey);
-            printSurveyResult(userSurvey);
+            if (Objects.isNull(userSurvey)) {
+                ioService.write(localizationService.getLocalizedMessage(SURVEY_NOT_CREATED) + "\n");
+            } else {
+                surveyQuestions = loadSurveyQuestions();
+                runSurvey(surveyQuestions, userSurvey);
+            }
         } catch (SurveyException e) {
             log.error(e.getMessage(), e);
             ioService.write("Error occurred during running application.");
+        }
+    }
+
+    @Override
+    public void printSurveyResults() {
+        if (Objects.isNull(userSurvey)) {
+            ioService.write(localizationService.getLocalizedMessage(SURVEY_NOT_CREATED) + "\n");
+        } else if (userSurvey.getUserAnswers().isEmpty()) {
+            ioService.write(localizationService.getLocalizedMessage(SURVEY_NOT_COMPLETED) + "\n");
+        } else {
+            printSurveyResult(userSurvey);
         }
     }
 
@@ -54,20 +89,14 @@ public class SurveyServiceImpl implements SurveyService {
                 surveyConfiguration.getLocalizedQuestionsPaths());
     }
 
-    private UserSurvey createUserSurvey() {
-        ioService.write(localizationService.getLocalizedMessage(REQUEST_USER_FIRSTNAME) + " ");
-        String userFirstName = ioService.readFromConsole();
-        ioService.write(localizationService.getLocalizedMessage(REQUEST_USER_LASTNAME) + " ");
-        String userLastName = ioService.readFromConsole();
-        return new UserSurvey(userFirstName, userLastName);
-    }
-
     private void runSurvey(List<Question> surveyQuestions, UserSurvey userSurvey) {
+        userSurvey.clearResults();
         for (Question question : surveyQuestions) {
             printQuestion(question);
             String userAnswer = ioService.readFromConsole();
             userSurvey.addUserAnswer(question, userAnswer);
         }
+        ioService.write(localizationService.getLocalizedMessage(SURVEY_FINISHED) + "\n");
     }
 
     private void printQuestion(Question question) {
@@ -85,11 +114,13 @@ public class SurveyServiceImpl implements SurveyService {
                         (userSurvey.getResult() >= surveyConfiguration.getRequiredAnswers()
                                 ? RESULT_PASSED : RESULT_FAILED))}) + "\n");
 
-        for (Map.Entry<Question, String> answer : userSurvey.getUserAnswers().entrySet()) {
-            Question question = answer.getKey();
-            String userAnswer = answer.getValue();
-            ioService.write(localizationService.getLocalizedMessage(RESULT_SHOW_ANSWER,
-                    new Object[] {question.getQuestion(), question.getCorrectAnswer(), userAnswer}) + "\n");
+        if (userSurvey.getResult() >= surveyConfiguration.getRequiredAnswers()) {
+            for (Map.Entry<Question, String> answer : userSurvey.getUserAnswers().entrySet()) {
+                Question question = answer.getKey();
+                String userAnswer = answer.getValue();
+                ioService.write(localizationService.getLocalizedMessage(RESULT_SHOW_ANSWER,
+                        new Object[]{question.getQuestion(), question.getCorrectAnswer(), userAnswer}) + "\n");
+            }
         }
     }
 }
