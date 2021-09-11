@@ -1,0 +1,12 @@
+spring:
+  messages:
+    basename: i18n/messages
+  shell:
+    interactive:
+      enabled: false
+
+survey:
+  default-questions-path: /test-csv/questions-correct.csv
+  localized-questions-paths:
+    - /test-csv/questions-correct.csv
+  required-answers: 4

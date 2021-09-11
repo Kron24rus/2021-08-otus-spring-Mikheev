@@ -1,0 +1,9 @@
+spring:
+  messages:
+    basename: i18n/messages
+
+survey:
+  default-questions-path: /csv/questions.csv
+  localized-questions-paths:
+    - /csv/questions_ru_RU.csv
+  required-answers: 4
