@@ -1,13 +1,7 @@
 package com.mikheev.homework.repositories;
 
 import com.mikheev.homework.domain.Genre;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface GenreRepository {
-
-    List<Genre> findAll();
-
-    Optional<Genre> findById(long id);
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 }

@@ -4,9 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "comments")
-@Data
 public class Comment {
 
     @Id
@@ -21,10 +21,6 @@ public class Comment {
     private Book book;
 
     public Comment() {
-    }
-
-    public Comment(String text) {
-        this.text = text;
     }
 
     @Override

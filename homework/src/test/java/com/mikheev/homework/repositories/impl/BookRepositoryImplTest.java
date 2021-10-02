@@ -3,6 +3,7 @@ package com.mikheev.homework.repositories.impl;
 import com.mikheev.homework.domain.Author;
 import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Genre;
+import com.mikheev.homework.repositories.BookRepository;
 import lombok.val;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -10,13 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Tests for book repository")
 @DataJpaTest
-@Import(BookRepositoryImpl.class)
 class BookRepositoryImplTest {
 
     private static final long BOOK_ID = 1L;
@@ -30,7 +29,7 @@ class BookRepositoryImplTest {
     private static final String BOOK_TITLE_DETECTIVE = "detectiveBook";
 
     @Autowired
-    private BookRepositoryImpl bookRepository;
+    private BookRepository bookRepository;
 
     @Autowired
     private TestEntityManager entityManager;

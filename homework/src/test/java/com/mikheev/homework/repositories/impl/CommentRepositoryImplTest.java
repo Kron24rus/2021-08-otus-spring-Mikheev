@@ -2,6 +2,7 @@ package com.mikheev.homework.repositories.impl;
 
 import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Comment;
+import com.mikheev.homework.repositories.CommentRepository;
 import lombok.val;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -10,13 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DisplayName("Tests for comment repository")
 @DataJpaTest
-@Import(CommentRepositoryImpl.class)
 class CommentRepositoryImplTest {
 
     private static final long EXPECTED_BOOK_ID = 0;
@@ -28,14 +27,14 @@ class CommentRepositoryImplTest {
     private static final long EXPECTED_NEW_COMMENT_ID = 5;
 
     @Autowired
-    private CommentRepositoryImpl commentRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Test
     void findCommentsByBookId_success() {
-        val comments = commentRepository.findCommentsByBookId(EXPECTED_BOOK_ID);
+        val comments = commentRepository.findByBookId(EXPECTED_BOOK_ID);
         assertThat(comments).isNotNull().hasSize(EXPECTED_NUMBER_OF_COMMENTS)
                 .allMatch(comment -> comment.getText().equals(EXPECTED_COMMENT_TEXT))
                 .allMatch(comment -> comment.getBook().getId() == EXPECTED_BOOK_ID);
@@ -43,7 +42,7 @@ class CommentRepositoryImplTest {
 
     @Test
     void findCommentsByBookId_wrongBookId() {
-        val comments = commentRepository.findCommentsByBookId(NOT_EXISTING_BOOK_ID);
+        val comments = commentRepository.findByBookId(NOT_EXISTING_BOOK_ID);
         assertThat(comments).isEmpty();
     }
 

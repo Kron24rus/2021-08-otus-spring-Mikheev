@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(readOnly = true)
     @Override
     public String getAllBookCommentsAsString(long id) {
-        List<Comment> comments = commentRepository.findCommentsByBookId(id);
+        List<Comment> comments = commentRepository.findByBookId(id);
         StringBuilder resultMessage = new StringBuilder();
         if (comments != null && !comments.isEmpty()) {
             resultMessage.append(EntityFormatterUtils.prettyPrintEntity(comments, "Comments for book"));

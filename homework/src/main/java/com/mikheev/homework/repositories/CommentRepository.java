@@ -1,17 +1,11 @@
 package com.mikheev.homework.repositories;
 
 import com.mikheev.homework.domain.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface CommentRepository {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    Optional<Comment> findById(long id);
-
-    List<Comment> findCommentsByBookId(long bookId);
-
-    Comment save(Comment comment);
-
-    void deleteById(long id);
+    List<Comment> findByBookId(long bookId);
 }
