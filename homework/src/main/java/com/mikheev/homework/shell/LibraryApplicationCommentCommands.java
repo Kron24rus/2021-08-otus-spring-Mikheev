@@ -1,17 +1,15 @@
 package com.mikheev.homework.shell;
 
 import com.mikheev.homework.service.CommentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
+@RequiredArgsConstructor
 @ShellComponent
 public class LibraryApplicationCommentCommands {
 
-    private CommentService commentService;
-
-    public LibraryApplicationCommentCommands(CommentService commentService) {
-        this.commentService = commentService;
-    }
+    private final CommentService commentService;
 
     @ShellMethod(value = "Display book comments", key = {"getcomments"})
     public String displayBookComments(String id) {

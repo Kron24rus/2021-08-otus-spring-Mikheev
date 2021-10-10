@@ -1,18 +1,16 @@
 package com.mikheev.homework.shell;
 
 import com.mikheev.homework.service.BookService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+@RequiredArgsConstructor
 @ShellComponent
 public class LibraryApplicationBookCommands {
 
-    private BookService bookService;
-
-    public LibraryApplicationBookCommands(BookService bookService) {
-        this.bookService = bookService;
-    }
+    private final BookService bookService;
 
     @ShellMethod(value = "Display book with specified id", key = {"getbook"})
     public String displayBookWithId(String id) {

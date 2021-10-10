@@ -7,21 +7,18 @@ import com.mikheev.homework.repositories.BookRepository;
 import com.mikheev.homework.repositories.CommentRepository;
 import com.mikheev.homework.service.CommentService;
 import com.mikheev.homework.utils.EntityFormatterUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final BookRepository bookRepository;
-
-    public CommentServiceImpl(CommentRepository commentRepository, BookRepository bookRepository) {
-        this.commentRepository = commentRepository;
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public String getAllBookCommentsAsString(String id) {

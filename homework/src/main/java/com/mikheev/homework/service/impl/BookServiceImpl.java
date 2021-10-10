@@ -9,6 +9,7 @@ import com.mikheev.homework.repositories.BookRepository;
 import com.mikheev.homework.repositories.GenreRepository;
 import com.mikheev.homework.service.BookService;
 import com.mikheev.homework.utils.EntityFormatterUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -16,19 +17,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
-
-    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository,
-                           GenreRepository genreRepository) {
-        this.bookRepository = bookRepository;
-        this.authorRepository = authorRepository;
-        this.genreRepository = genreRepository;
-    }
 
     @Override
     public String getAllBooksAsString() {

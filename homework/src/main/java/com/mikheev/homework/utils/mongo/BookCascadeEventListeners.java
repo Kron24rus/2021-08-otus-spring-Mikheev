@@ -2,6 +2,7 @@ package com.mikheev.homework.utils.mongo;
 
 import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Comment;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
@@ -11,14 +12,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @Component
 public class BookCascadeEventListeners extends AbstractMongoEventListener<Book> {
 
     private final MongoOperations mongoOperations;
-
-    public BookCascadeEventListeners(MongoOperations mongoOperations) {
-        this.mongoOperations = mongoOperations;
-    }
 
     @Override
     public void onBeforeDelete(BeforeDeleteEvent<Book> event) {

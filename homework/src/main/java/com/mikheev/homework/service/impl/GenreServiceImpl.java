@@ -5,20 +5,18 @@ import com.mikheev.homework.domain.Genre;
 import com.mikheev.homework.repositories.GenreRepository;
 import com.mikheev.homework.service.GenreService;
 import com.mikheev.homework.utils.EntityFormatterUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
-
-    public GenreServiceImpl(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
-    }
 
     @Override
     public String getAllGenresAsString() {
