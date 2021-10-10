@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "authors")
 public class Author {
 
@@ -15,7 +16,4 @@ public class Author {
     private String id;
 
     private String name;
-
-    public Author() {
-    }
 }

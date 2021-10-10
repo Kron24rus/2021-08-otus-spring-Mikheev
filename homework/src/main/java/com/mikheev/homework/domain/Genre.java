@@ -1,9 +1,6 @@
 package com.mikheev.homework.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "genres")
 public class Genre {
 
@@ -18,7 +16,4 @@ public class Genre {
     private String id;
 
     private String name;
-
-    public Genre() {
-    }
 }

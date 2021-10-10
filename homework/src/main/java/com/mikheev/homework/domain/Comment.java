@@ -1,13 +1,15 @@
 package com.mikheev.homework.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"book"})
 @Document(collection = "comments")
 public class Comment {
 
@@ -18,21 +20,4 @@ public class Comment {
 
     @DBRef(lazy = true)
     private Book book;
-
-    public Comment() {
-    }
-
-    public Comment(String id, String text, Book book) {
-        this.id = id;
-        this.text = text;
-        this.book = book;
-    }
-
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                '}';
-    }
 }

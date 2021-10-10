@@ -5,20 +5,17 @@ import com.mikheev.homework.domain.Author;
 import com.mikheev.homework.repositories.AuthorRepository;
 import com.mikheev.homework.service.AuthorService;
 import com.mikheev.homework.utils.EntityFormatterUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
-
-    public AuthorServiceImpl(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
 
     @Override
     public String getAllAuthorsAsString() {
@@ -28,8 +25,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public String getAuthorAsString(String id) {
-        Optional<Author> optionalAuthor = authorRepository.findById(id);
-        return optionalAuthor
+        return authorRepository.findById(id)
                 .map(author -> EntityFormatterUtils.prettyPrintEntity(Collections.singletonList(author), "Author with id: " + id))
                 .orElseGet(() -> "No Author with id: " + id + "\n");
     }

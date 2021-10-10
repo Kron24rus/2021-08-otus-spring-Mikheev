@@ -1,8 +1,6 @@
 package com.mikheev.homework.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,7 +9,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
+@NoArgsConstructor
+@ToString(exclude = {"comments"})
 @Document(collection = "books")
 public class Book {
 
@@ -29,9 +29,6 @@ public class Book {
     @DBRef(lazy = true)
     private List<Comment> comments;
 
-    public Book() {
-    }
-
     public Book(String title, Author author, Genre genre) {
         this.title = title;
         this.author = author;
@@ -43,15 +40,5 @@ public class Book {
         this.title = title;
         this.author = author;
         this.genre = genre;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author=" + author +
-                ", genre=" + genre +
-                '}';
     }
 }
