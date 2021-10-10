@@ -1,38 +1,45 @@
 package com.mikheev.homework.domain;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.util.List;
 
-@Data
-@Entity
-@Table(name = "books")
+@Getter
+@Setter
+@EqualsAndHashCode
+@Document(collection = "books")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "title")
     private String title;
 
-    @ManyToOne(targetEntity = Author.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "author_id")
+    @DBRef
     private Author author;
 
-    @ManyToOne(targetEntity = Genre.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "genre_id")
+    @DBRef
     private Genre genre;
 
-    @OneToMany(mappedBy = "book", cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            fetch = FetchType.LAZY, orphanRemoval = true)
+    @DBRef(lazy = true)
     private List<Comment> comments;
 
     public Book() {
     }
 
     public Book(String title, Author author, Genre genre) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+    }
+
+    public Book(String id, String title, Author author, Genre genre) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.genre = genre;

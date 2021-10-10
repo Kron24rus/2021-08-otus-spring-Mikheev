@@ -14,7 +14,7 @@ public class LibraryApplicationAuthorCommands {
     }
 
     @ShellMethod(value = "Display author with specified id", key = {"getauthor"})
-    public String displayAuthorWithId(long id) {
+    public String displayAuthorWithId(String id) {
         return authorService.getAuthorAsString(id);
     }
 

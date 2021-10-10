@@ -4,5 +4,5 @@ public interface AuthorService {
 
     String getAllAuthorsAsString();
 
-    String getAuthorAsString(long id);
+    String getAuthorAsString(String id);
 }

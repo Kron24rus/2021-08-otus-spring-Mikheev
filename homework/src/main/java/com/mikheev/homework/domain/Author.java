@@ -1,19 +1,19 @@
 package com.mikheev.homework.domain;
 
-import lombok.Data;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-
-@Data
-@Entity
-@Table(name = "authors")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@Document(collection = "authors")
 public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "name")
     private String name;
 
     public Author() {

@@ -14,27 +14,27 @@ public class LibraryApplicationCommentCommands {
     }
 
     @ShellMethod(value = "Display book comments", key = {"getcomments"})
-    public String displayBookComments(long id) {
+    public String displayBookComments(String id) {
         return commentService.getAllBookCommentsAsString(id);
     }
 
     @ShellMethod(value = "Add new comment to book", key = {"addcomment"})
-    public String addNewComment(long bookId, String text) {
+    public String addNewComment(String bookId, String text) {
         return commentService.addComment(bookId, text);
     }
 
     @ShellMethod(value = "Update comment text", key = {"updatecomment"})
-    public String updateComment(long commentId, String text) {
+    public String updateComment(String commentId, String text) {
         return commentService.updateComment(commentId, text);
     }
 
     @ShellMethod(value = "Delete comment", key = {"deletecomment"})
-    public String deleteComment(long commentId) {
+    public String deleteComment(String commentId) {
         return commentService.deleteComment(commentId);
     }
 
     @ShellMethod(value = "Copy comment", key = {"copycomment"})
-    public String copyComment(long commentId, long bookId) {
+    public String copyComment(String commentId, String bookId) {
         return commentService.copyComment(commentId, bookId);
     }
 }

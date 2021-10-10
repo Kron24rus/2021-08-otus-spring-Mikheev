@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(readOnly = true)
     @Override
-    public String getAllBookCommentsAsString(long id) {
+    public String getAllBookCommentsAsString(String id) {
         List<Comment> comments = commentRepository.findByBookId(id);
         StringBuilder resultMessage = new StringBuilder();
         if (comments != null && !comments.isEmpty()) {
@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public String addComment(long bookId, String text) {
+    public String addComment(String bookId, String text) {
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
@@ -55,7 +55,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public String updateComment(long commentId, String text) {
+    public String updateComment(String commentId, String text) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isPresent()) {
             Comment comment = optionalComment.get();
@@ -69,14 +69,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public String deleteComment(long commentId) {
+    public String deleteComment(String commentId) {
         commentRepository.deleteById(commentId);
         return "Comment with id: " + commentId + " removed from database";
     }
 
     @Transactional
     @Override
-    public String copyComment(long commentId, long bookId) {
+    public String copyComment(String commentId, String bookId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isPresent() && optionalComment.isPresent()) {

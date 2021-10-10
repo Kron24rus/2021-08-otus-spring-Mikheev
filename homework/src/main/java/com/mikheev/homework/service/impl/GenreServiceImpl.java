@@ -30,7 +30,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Transactional(readOnly = true)
     @Override
-    public String getGenreAsString(long id) {
+    public String getGenreAsString(String id) {
         Optional<Genre> optionalGenre = genreRepository.findById(id);
         return optionalGenre
                 .map(genre -> EntityFormatterUtils.prettyPrintEntity(Collections.singletonList(genre), "Genre with id: " + id))

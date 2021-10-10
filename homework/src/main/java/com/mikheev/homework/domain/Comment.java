@@ -1,26 +1,31 @@
 package com.mikheev.homework.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-
-@Data
-@Entity
-@Table(name = "comments")
+@Getter
+@Setter
+@Document(collection = "comments")
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "text")
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @DBRef(lazy = true)
     private Book book;
 
     public Comment() {
+    }
+
+    public Comment(String id, String text, Book book) {
+        this.id = id;
+        this.text = text;
+        this.book = book;
     }
 
     @Override

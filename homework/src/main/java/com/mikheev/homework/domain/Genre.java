@@ -1,19 +1,22 @@
 package com.mikheev.homework.domain;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-
-@Data
-@Entity
-@Table(name = "genres")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@Document(collection = "genres")
 public class Genre {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "name")
     private String name;
 
     public Genre() {

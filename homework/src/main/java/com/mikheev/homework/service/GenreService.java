@@ -4,5 +4,5 @@ public interface GenreService {
 
     String getAllGenresAsString();
 
-    String getGenreAsString(long id);
+    String getGenreAsString(String id);
 }

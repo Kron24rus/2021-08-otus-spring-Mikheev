@@ -2,13 +2,13 @@ package com.mikheev.homework.service;
 
 public interface CommentService {
 
-    String getAllBookCommentsAsString(long id);
+    String getAllBookCommentsAsString(String id);
 
-    String addComment(long bookId, String text);
+    String addComment(String bookId, String text);
 
-    String updateComment(long commentId, String text);
+    String updateComment(String commentId, String text);
 
-    String deleteComment(long commentId);
+    String deleteComment(String commentId);
 
-    String copyComment(long commentId, long bookId);
+    String copyComment(String commentId, String bookId);
 }

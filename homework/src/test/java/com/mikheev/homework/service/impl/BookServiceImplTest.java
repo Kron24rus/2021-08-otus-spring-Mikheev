@@ -24,13 +24,13 @@ import static org.mockito.Mockito.when;
 @Import(BookServiceImpl.class)
 class BookServiceImplTest {
 
-    private static final long ENTITY_ID = 153;
+    private static final String ENTITY_ID = "153";
     private static final String ENTITY_NAME = "entityName";
     private static final String NEW_ENTITY_NAME = "newEntityName";
-    private static final long AUTHOR_ID = 145;
-    private static final long NEW_AUTHOR_ID = 255;
-    private static final long GENRE_ID = 22;
-    private static final long NEW_GENRE_ID = 33;
+    private static final String AUTHOR_ID = "145";
+    private static final String NEW_AUTHOR_ID = "255";
+    private static final String GENRE_ID = "22";
+    private static final String NEW_GENRE_ID = "33";
 
     @MockBean
     private BookRepository bookRepository;

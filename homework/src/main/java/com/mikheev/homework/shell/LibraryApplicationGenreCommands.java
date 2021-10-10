@@ -14,7 +14,7 @@ public class LibraryApplicationGenreCommands {
     }
 
     @ShellMethod(value = "Display genre with specified id", key = {"getgenre"})
-    public String displayGenreWithId(long id) {
+    public String displayGenreWithId(String id) {
         return genreService.getGenreAsString(id);
     }
 

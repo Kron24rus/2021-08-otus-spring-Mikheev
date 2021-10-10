@@ -40,7 +40,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public String getBookAsString(long id) {
+    public String getBookAsString(String id) {
         Optional<Book> optionalBook = bookRepository.findById(id);
         return optionalBook.map(book -> EntityFormatterUtils.prettyPrintEntity(Collections.singletonList(book), "Book with id: " + id))
                 .orElseGet(() -> "No Book with id: " + id + "\n");
@@ -48,7 +48,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public String addBook(String title, long authorId, long genreId) {
+    public String addBook(String title, String authorId, String genreId) {
         StringBuilder resultMessage = new StringBuilder("Adding new book: ");
 
         Author author = getAuthorOrAppendNotFound(authorId, resultMessage);
@@ -64,7 +64,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public String updateBook(long id, String title, Long author_id, Long genre_id) {
+    public String updateBook(String id, String title, String author_id, String genre_id) {
         StringBuilder resultMessage = new StringBuilder("Updating book with id: ").append(id).append(": ");
         boolean success = true;
         Optional<Book> optionalBook = bookRepository.findById(id);
@@ -99,12 +99,12 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public String deleteBook(long id) {
+    public String deleteBook(String id) {
         bookRepository.deleteById(id);
         return "Book with id: " + id + " removed from database";
     }
 
-    private Author getAuthorOrAppendNotFound(long authorId, StringBuilder resultMessage) {
+    private Author getAuthorOrAppendNotFound(String authorId, StringBuilder resultMessage) {
         Optional<Author> optionalAuthor = authorRepository.findById(authorId);
         if (optionalAuthor.isPresent()) {
             return optionalAuthor.get();
@@ -114,7 +114,7 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    private Genre getGenreOrAppendNotFound(long genreId, StringBuilder resultMessage) {
+    private Genre getGenreOrAppendNotFound(String genreId, StringBuilder resultMessage) {
         Optional<Genre> optionalGenre = genreRepository.findById(genreId);
         if (optionalGenre.isPresent()) {
             return optionalGenre.get();

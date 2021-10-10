@@ -30,7 +30,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Transactional(readOnly = true)
     @Override
-    public String getAuthorAsString(long id) {
+    public String getAuthorAsString(String id) {
         Optional<Author> optionalAuthor = authorRepository.findById(id);
         return optionalAuthor
                 .map(author -> EntityFormatterUtils.prettyPrintEntity(Collections.singletonList(author), "Author with id: " + id))
