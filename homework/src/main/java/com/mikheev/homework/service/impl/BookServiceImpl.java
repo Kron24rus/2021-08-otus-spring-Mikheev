@@ -10,7 +10,6 @@ import com.mikheev.homework.repositories.GenreRepository;
 import com.mikheev.homework.service.BookService;
 import com.mikheev.homework.utils.EntityFormatterUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,14 +30,12 @@ public class BookServiceImpl implements BookService {
         this.genreRepository = genreRepository;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public String getAllBooksAsString() {
         List<Book> books = bookRepository.findAll();
         return EntityFormatterUtils.prettyPrintEntity(books, "Books in data base");
     }
 
-    @Transactional(readOnly = true)
     @Override
     public String getBookAsString(String id) {
         Optional<Book> optionalBook = bookRepository.findById(id);
@@ -46,7 +43,6 @@ public class BookServiceImpl implements BookService {
                 .orElseGet(() -> "No Book with id: " + id + "\n");
     }
 
-    @Transactional
     @Override
     public String addBook(String title, String authorId, String genreId) {
         StringBuilder resultMessage = new StringBuilder("Adding new book: ");
@@ -62,7 +58,6 @@ public class BookServiceImpl implements BookService {
         return resultMessage.toString();
     }
 
-    @Transactional
     @Override
     public String updateBook(String id, String title, String author_id, String genre_id) {
         StringBuilder resultMessage = new StringBuilder("Updating book with id: ").append(id).append(": ");
@@ -97,7 +92,6 @@ public class BookServiceImpl implements BookService {
         return resultMessage.toString();
     }
 
-    @Transactional
     @Override
     public String deleteBook(String id) {
         bookRepository.deleteById(id);

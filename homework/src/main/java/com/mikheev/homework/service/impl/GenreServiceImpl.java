@@ -6,7 +6,6 @@ import com.mikheev.homework.repositories.GenreRepository;
 import com.mikheev.homework.service.GenreService;
 import com.mikheev.homework.utils.EntityFormatterUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,14 +20,12 @@ public class GenreServiceImpl implements GenreService {
         this.genreRepository = genreRepository;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public String getAllGenresAsString() {
         List<Genre> genres = genreRepository.findAll();
         return EntityFormatterUtils.prettyPrintEntity(genres, "Genres in database");
     }
 
-    @Transactional(readOnly = true)
     @Override
     public String getGenreAsString(String id) {
         Optional<Genre> optionalGenre = genreRepository.findById(id);

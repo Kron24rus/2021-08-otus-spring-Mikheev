@@ -8,7 +8,6 @@ import com.mikheev.homework.repositories.CommentRepository;
 import com.mikheev.homework.service.CommentService;
 import com.mikheev.homework.utils.EntityFormatterUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +23,6 @@ public class CommentServiceImpl implements CommentService {
         this.bookRepository = bookRepository;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public String getAllBookCommentsAsString(String id) {
         List<Comment> comments = commentRepository.findByBookId(id);
@@ -37,7 +35,6 @@ public class CommentServiceImpl implements CommentService {
         return resultMessage.toString();
     }
 
-    @Transactional
     @Override
     public String addComment(String bookId, String text) {
         Optional<Book> optionalBook = bookRepository.findById(bookId);
@@ -53,7 +50,6 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    @Transactional
     @Override
     public String updateComment(String commentId, String text) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
@@ -67,14 +63,12 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    @Transactional
     @Override
     public String deleteComment(String commentId) {
         commentRepository.deleteById(commentId);
         return "Comment with id: " + commentId + " removed from database";
     }
 
-    @Transactional
     @Override
     public String copyComment(String commentId, String bookId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
