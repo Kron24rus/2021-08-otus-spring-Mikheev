@@ -89,7 +89,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String deleteBook(String id) {
-        bookRepository.deleteById(id);
+        bookRepository.deleteByIdCascadeComments(id);
         return "Book with id: " + id + " removed from database";
     }
 

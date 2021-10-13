@@ -7,13 +7,12 @@ import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Tests for comment repository")
-@DataMongoTest
 class CommentRepositoryImplTest extends AbstractTestRepository {
 
     private static final String EXPECTED_BOOK_ID = "0";
@@ -42,6 +41,7 @@ class CommentRepositoryImplTest extends AbstractTestRepository {
         assertThat(comments).isEmpty();
     }
 
+    @DirtiesContext
     @Test
     void save_newCommentSaved() {
         Book book = mongoTemplate.findById(EXPECTED_BOOK_ID, Book.class);
@@ -54,6 +54,7 @@ class CommentRepositoryImplTest extends AbstractTestRepository {
         assertThat(savedComment).usingRecursiveComparison().isEqualTo(expectedComment);
     }
 
+    @DirtiesContext
     @Test
     void save_updateCommentSuccess() {
         Comment comment = mongoTemplate.findById(EXPECTED_COMMENT_ID, Comment.class);
@@ -67,6 +68,7 @@ class CommentRepositoryImplTest extends AbstractTestRepository {
         assertThat(updatedComment.getText()).isEqualTo(UPDATED_COMMENT_TEXT);
     }
 
+    @DirtiesContext
     @Test
     void deleteById_success() {
         Comment comment = mongoTemplate.findById(EXPECTED_COMMENT_ID, Comment.class);

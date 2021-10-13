@@ -92,7 +92,7 @@ class BookServiceImplTest {
     @Test
     void deleteBook_messageWithCorrectIdReturned() {
         String deleteMessage = bookService.deleteBook(ENTITY_ID);
-        Mockito.verify(bookRepository, times(1)).deleteById(ENTITY_ID);
+        Mockito.verify(bookRepository, times(1)).deleteByIdCascadeComments(ENTITY_ID);
         AssertionsForClassTypes.assertThat(deleteMessage).isEqualTo("Book with id: " + ENTITY_ID + " removed from database");
     }
 

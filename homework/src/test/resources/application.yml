@@ -2,6 +2,7 @@ spring:
   data:
     mongodb:
       database: library
+      port: 0
 
   shell:
     interactive:
@@ -14,4 +15,4 @@ mongock:
     write-concern:
       journal: false
     read-concern: local
-  enabled: false
+  enabled: true

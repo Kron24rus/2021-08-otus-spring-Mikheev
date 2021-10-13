@@ -8,13 +8,12 @@ import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Tests for book repository")
-@DataMongoTest
 class BookRepositoryImplTest extends AbstractTestRepository {
 
     private static final String BOOK_ID = "1";
@@ -53,6 +52,7 @@ class BookRepositoryImplTest extends AbstractTestRepository {
                 .allMatch(book -> book.getGenre() != null);
     }
 
+    @DirtiesContext
     @Test
     void saveBook_newBookSaved() {
         Author author = mongoTemplate.findById("0", Author.class);
@@ -67,6 +67,7 @@ class BookRepositoryImplTest extends AbstractTestRepository {
         assertThat(savedBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
+    @DirtiesContext
     @Test
     void saveBook_bookUpdated() {
         Book book = mongoTemplate.findById(BOOK_ID, Book.class);
@@ -85,12 +86,13 @@ class BookRepositoryImplTest extends AbstractTestRepository {
         assertThat(savedBook.getId()).isEqualTo(BOOK_ID);
     }
 
+    @DirtiesContext
     @Test
     void deleteBook_success() {
         Book book = mongoTemplate.findById(BOOK_ID, Book.class);
         assertThat(book).isNotNull();
 
-        bookRepository.deleteById(BOOK_ID);
+        bookRepository.deleteByIdCascadeComments(BOOK_ID);
 
         Book expectedNullBook = mongoTemplate.findById(BOOK_ID, Book.class);
         assertThat(expectedNullBook).isNull();
