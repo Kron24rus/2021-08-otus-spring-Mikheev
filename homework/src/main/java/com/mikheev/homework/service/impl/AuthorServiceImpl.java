@@ -1,0 +1,32 @@
+package com.mikheev.homework.service.impl;
+
+
+import com.mikheev.homework.domain.Author;
+import com.mikheev.homework.repositories.AuthorRepository;
+import com.mikheev.homework.service.AuthorService;
+import com.mikheev.homework.utils.EntityFormatterUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+
+@RequiredArgsConstructor
+@Service
+public class AuthorServiceImpl implements AuthorService {
+
+    private final AuthorRepository authorRepository;
+
+    @Override
+    public String getAllAuthorsAsString() {
+        List<Author> authors = authorRepository.findAll();
+        return EntityFormatterUtils.prettyPrintEntity(authors, "Authors in database");
+    }
+
+    @Override
+    public String getAuthorAsString(String id) {
+        return authorRepository.findById(id)
+                .map(author -> EntityFormatterUtils.prettyPrintEntity(Collections.singletonList(author), "Author with id: " + id))
+                .orElseGet(() -> "No Author with id: " + id + "\n");
+    }
+}

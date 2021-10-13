@@ -1,0 +1,18 @@
+spring:
+  data:
+    mongodb:
+      database: library
+      port: 0
+
+  shell:
+    interactive:
+      enabled: false
+
+mongock:
+  runner-type: "ApplicationRunner"
+  change-logs-scan-package: com.mikheev.homework.mongocktest
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+  enabled: true
