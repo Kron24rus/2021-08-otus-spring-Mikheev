@@ -3,13 +3,12 @@ package com.mikheev.homework.service.impl;
 import com.mikheev.homework.domain.Author;
 import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Genre;
+import com.mikheev.homework.exception.NotFoundException;
 import com.mikheev.homework.repositories.AuthorRepository;
 import com.mikheev.homework.repositories.BookRepository;
 import com.mikheev.homework.repositories.GenreRepository;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -17,8 +16,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @Import(BookServiceImpl.class)
@@ -43,28 +43,29 @@ class BookServiceImplTest {
     private BookServiceImpl bookService;
 
     @Test
-    void displayAllBooks() {
-        String responseMessage = bookService.getAllBooksAsString();
-        Mockito.verify(bookRepository, times(1)).findAll();
-        AssertionsForClassTypes.assertThat(responseMessage).contains("Books in data base");
+    void getAllBooks() {
+        bookService.getAllBooks();
+        verify(bookRepository, times(1)).findAll();
     }
 
     @Test
-    void displayBookWithId() {
+    void getBookWithId() {
         Book book = new Book();
         book.setTitle(ENTITY_NAME);
         book.setId(ENTITY_ID);
         Optional<Book> optionalBook = Optional.of(book);
-        when(bookRepository.findById(ENTITY_ID)).thenReturn(optionalBook);
-        String responseMessage = bookService.getBookAsString(ENTITY_ID);
-        AssertionsForClassTypes.assertThat(responseMessage).contains("Book with id: " + ENTITY_ID);
+        when(bookRepository.findById(ENTITY_ID, "book-with-author-genre")).thenReturn(optionalBook);
+        Book foundBook = bookService.getBookWithAuthorAndGenre(ENTITY_ID);
+        assertThat(foundBook).isEqualTo(book);
     }
 
 
     @Test
     void addBook_messageWithCorrectIdReturned() {
         Author author = new Author();
+        author.setId(AUTHOR_ID);
         Genre genre = new Genre();
+        genre.setId(GENRE_ID);
         Optional<Author> optionalAuthor = Optional.of(author);
         Optional<Genre> optionalGenre = Optional.of(genre);
         Book newBook = new Book(ENTITY_NAME, author, genre);
@@ -73,32 +74,33 @@ class BookServiceImplTest {
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(optionalAuthor);
         when(genreRepository.findById(GENRE_ID)).thenReturn(optionalGenre);
         when(bookRepository.save(newBook)).thenReturn(savedBook);
-        String insertMessage = bookService.addBook(ENTITY_NAME, AUTHOR_ID, GENRE_ID);
-        Mockito.verify(bookRepository, times(1)).save(newBook);
-        AssertionsForClassTypes.assertThat(insertMessage).isEqualTo("Adding new book: Inserted with id - " + ENTITY_ID);
+        bookService.addBook(newBook);
+        verify(bookRepository, times(1)).save(newBook);
     }
 
     @Test
     void addBook_notSavedWrongAuthorId() {
+        Author author = new Author();
+        author.setId(AUTHOR_ID);
         Genre genre = new Genre();
-        Optional<Author> optionalAuthor = Optional.empty();
         Optional<Genre> optionalGenre = Optional.of(genre);
-        when(authorRepository.findById(AUTHOR_ID)).thenReturn(optionalAuthor);
+        when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.empty());
         when(genreRepository.findById(GENRE_ID)).thenReturn(optionalGenre);
-        String insertMessage = bookService.addBook(ENTITY_NAME, AUTHOR_ID, GENRE_ID);
-        AssertionsForClassTypes.assertThat(insertMessage).isEqualTo("Adding new book: Author with id: " + AUTHOR_ID + " not found. ");
+        Book newBook = new Book(ENTITY_NAME, author, genre);
+        Exception exception = assertThrows(NotFoundException.class, () -> bookService.addBook(newBook));
+        assertThat(exception.getMessage()).isEqualTo("Author with id " + AUTHOR_ID + " not found!");
     }
 
     @Test
     void deleteBook_messageWithCorrectIdReturned() {
-        String deleteMessage = bookService.deleteBook(ENTITY_ID);
-        Mockito.verify(bookRepository, times(1)).deleteById(ENTITY_ID);
-        AssertionsForClassTypes.assertThat(deleteMessage).isEqualTo("Book with id: " + ENTITY_ID + " removed from database");
+        bookService.deleteBook(ENTITY_ID);
+        verify(bookRepository, times(1)).deleteById(ENTITY_ID);
     }
 
     @Test
     void updateBook_verifyThatBookEntityUpdated() {
-        Book book = new Book();
+        Book databaseBook = new Book();
+        Book bookWithUpdates = new Book();
         Genre genre = new Genre();
         genre.setId(GENRE_ID);
         Author author = new Author();
@@ -107,19 +109,23 @@ class BookServiceImplTest {
         newAuthor.setId(NEW_AUTHOR_ID);
         Genre newGenre = new Genre();
         newGenre.setId(NEW_GENRE_ID);
-        book.setId(ENTITY_ID);
-        book.setTitle(ENTITY_NAME);
-        book.setGenre(genre);
-        book.setAuthor(author);
-        Optional<Book> optionalBook = Optional.of(book);
+        databaseBook.setId(ENTITY_ID);
+        databaseBook.setTitle(ENTITY_NAME);
+        databaseBook.setGenre(genre);
+        databaseBook.setAuthor(author);
+        bookWithUpdates.setId(ENTITY_ID);
+        bookWithUpdates.setTitle(NEW_ENTITY_NAME);
+        bookWithUpdates.setAuthor(newAuthor);
+        bookWithUpdates.setGenre(newGenre);
+        Optional<Book> optionalBook = Optional.of(databaseBook);
         Optional<Author> optionalAuthor = Optional.of(newAuthor);
         Optional<Genre> optionalGenre = Optional.of(newGenre);
         when(bookRepository.findById(ENTITY_ID)).thenReturn(optionalBook);
         when(authorRepository.findById(NEW_AUTHOR_ID)).thenReturn(optionalAuthor);
         when(genreRepository.findById(NEW_GENRE_ID)).thenReturn(optionalGenre);
-        String updateMessage = bookService.updateBook(ENTITY_ID, NEW_ENTITY_NAME, NEW_AUTHOR_ID, NEW_GENRE_ID);
-        Mockito.verify(bookRepository, times(1)).save(book);
-        AssertionsForClassTypes.assertThat(book.getTitle()).isEqualTo(NEW_ENTITY_NAME);
-        AssertionsForClassTypes.assertThat(updateMessage).contains("Book updated");
+        when(bookRepository.save(databaseBook)).thenReturn(databaseBook);
+        Book updatedBook = bookService.updateBook(bookWithUpdates);
+        verify(bookRepository, times(1)).save(databaseBook);
+        assertThat(databaseBook.getTitle()).isEqualTo(updatedBook.getTitle());
     }
 }

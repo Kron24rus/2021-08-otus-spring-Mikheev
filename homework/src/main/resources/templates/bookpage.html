@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Book page</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .books, .books td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book info:</h1>
+
+    <table class="books">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Edit</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${book}">
+            <td th:text="*{id}">1</td>
+            <td th:text="*{title}">War And Peace</td>
+            <td th:text="*{author.name}">Leo Tolstoy</td>
+            <td th:text="*{genre.name}">Novel</td>
+            <td>
+                <a th:href="@{/editbook(id=*{id})}" href="editbook.html">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="books">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Text</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="comment : ${comments}" th:object="${comment}">
+            <td th:text="*{id}">1</td>
+            <td th:text="*{text}">Text</td>
+            <td>
+                <a th:href="@{/editcomment(bookId=${book.id}, id=*{id}, text=*{text})}" href="editcomment.html">Edit</a>
+            </td>
+            <td>
+                <form id="delete-comment-form" action="bookpage.html"
+                      th:action="@{/deletecomment(id=*{id}, bookId=${book.id})}" th:method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <a th:href="@{/addcomment(bookId=${book.id})}" href="addcomment.html">Add Comment</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+<div th:insert="~{fragments/homenavigation :: home}"></div>
+
+</body>
+</html>

@@ -1,14 +1,18 @@
 package com.mikheev.homework.service;
 
+import com.mikheev.homework.domain.Book;
+
+import java.util.List;
+
 public interface BookService {
 
-    String getAllBooksAsString();
+    List<Book> getAllBooks();
 
-    String getBookAsString(long id);
+    Book getBookWithAuthorAndGenre(long id);
 
-    String addBook(String title, long authorId, long genreId);
+    void addBook(Book book);
 
-    String deleteBook(long id);
+    Book updateBook(Book book);
 
-    String updateBook(long id, String title, Long author_id, Long genre_id);
+    void deleteBook(long id);
 }

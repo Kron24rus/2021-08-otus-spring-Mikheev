@@ -4,8 +4,6 @@ import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Comment;
 import com.mikheev.homework.repositories.CommentRepository;
 import lombok.val;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,31 +55,31 @@ class CommentRepositoryImplTest {
         newComment.setBook(book);
         Comment savedComment = commentRepository.save(newComment);
         Comment expectedComment = entityManager.find(Comment.class, EXPECTED_NEW_COMMENT_ID);
-        Assertions.assertThat(savedComment).usingRecursiveComparison().isEqualTo(expectedComment);
+        assertThat(savedComment).usingRecursiveComparison().isEqualTo(expectedComment);
     }
 
     @Test
     void save_updateCommentSuccess() {
         Comment comment = entityManager.find(Comment.class, EXPECTED_COMMENT_ID);
-        AssertionsForClassTypes.assertThat(comment.getText()).isEqualTo(EXPECTED_COMMENT_TEXT);
+        assertThat(comment.getText()).isEqualTo(EXPECTED_COMMENT_TEXT);
 
         comment.setText(UPDATED_COMMENT_TEXT);
 
         commentRepository.save(comment);
 
         Comment updatedComment = entityManager.find(Comment.class, EXPECTED_COMMENT_ID);
-        AssertionsForClassTypes.assertThat(updatedComment.getText()).isEqualTo(UPDATED_COMMENT_TEXT);
+        assertThat(updatedComment.getText()).isEqualTo(UPDATED_COMMENT_TEXT);
     }
 
     @Test
     void deleteById_success() {
         Comment comment = entityManager.find(Comment.class, EXPECTED_COMMENT_ID);
-        Assertions.assertThat(comment).isNotNull();
+        assertThat(comment).isNotNull();
         entityManager.detach(comment);
 
         commentRepository.deleteById(EXPECTED_COMMENT_ID);
 
         Comment expectedNullComment = entityManager.find(Comment.class, EXPECTED_COMMENT_ID);
-        Assertions.assertThat(expectedNullComment).isNull();
+        assertThat(expectedNullComment).isNull();
     }
 }

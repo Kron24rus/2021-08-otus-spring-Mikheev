@@ -1,14 +1,17 @@
 package com.mikheev.homework.service;
 
+import com.mikheev.homework.domain.Comment;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 public interface CommentService {
 
-    String getAllBookCommentsAsString(long id);
+    List<Comment> getBookComments(long id);
 
-    String addComment(long bookId, String text);
+    void addComment(long bookId, Comment comment);
 
-    String updateComment(long commentId, String text);
+    void updateComment(Comment comment);
 
-    String deleteComment(long commentId);
-
-    String copyComment(long commentId, long bookId);
+    void deleteComment(long commentId);
 }

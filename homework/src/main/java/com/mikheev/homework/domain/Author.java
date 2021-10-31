@@ -1,10 +1,16 @@
 package com.mikheev.homework.domain;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "authors")
 public class Author {
@@ -15,7 +21,4 @@ public class Author {
 
     @Column(name = "name")
     private String name;
-
-    public Author() {
-    }
 }

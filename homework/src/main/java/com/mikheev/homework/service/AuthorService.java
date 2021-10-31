@@ -1,8 +1,10 @@
 package com.mikheev.homework.service;
 
+import com.mikheev.homework.domain.Author;
+
+import java.util.List;
+
 public interface AuthorService {
 
-    String getAllAuthorsAsString();
-
-    String getAuthorAsString(long id);
+    List<Author> getAllAuthors();
 }

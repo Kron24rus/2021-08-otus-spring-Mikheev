@@ -3,8 +3,8 @@ spring:
     url: jdbc:h2:mem:testdb
   sql:
     init:
-      data-locations: data.sql
-      schema-locations: schema.sql
+      data-locations: classpath:data.sql
+      schema-locations: classpath:schema.sql
   jpa:
     generate-ddl: false
     hibernate:

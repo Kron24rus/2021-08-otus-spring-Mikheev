@@ -1,8 +1,10 @@
 package com.mikheev.homework.service;
 
+import com.mikheev.homework.domain.Genre;
+
+import java.util.List;
+
 public interface GenreService {
 
-    String getAllGenresAsString();
-
-    String getGenreAsString(long id);
+    List<Genre> getAllGenres();
 }

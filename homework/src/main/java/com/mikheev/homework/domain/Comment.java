@@ -1,10 +1,14 @@
 package com.mikheev.homework.domain;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
+@ToString(exclude = {"book"})
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -19,15 +23,4 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
-
-    public Comment() {
-    }
-
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                '}';
-    }
 }

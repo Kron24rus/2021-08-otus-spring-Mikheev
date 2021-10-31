@@ -1,11 +1,31 @@
 package com.mikheev.homework.domain;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
+@ToString(exclude = {"comments"})
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "book-with-all-associations",
+                attributeNodes = {
+                        @NamedAttributeNode("author"),
+                        @NamedAttributeNode("genre"),
+                        @NamedAttributeNode("comments")
+                }),
+        @NamedEntityGraph(
+                name = "book-with-author-genre",
+                attributeNodes = {
+                        @NamedAttributeNode("author"),
+                        @NamedAttributeNode("genre")
+                }
+        )
+})
 @Entity
 @Table(name = "books")
 public class Book {
@@ -17,11 +37,11 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-    @ManyToOne(targetEntity = Author.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Author.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToOne(targetEntity = Genre.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Genre.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
@@ -29,22 +49,9 @@ public class Book {
             fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> comments;
 
-    public Book() {
-    }
-
     public Book(String title, Author author, Genre genre) {
         this.title = title;
         this.author = author;
         this.genre = genre;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author=" + author +
-                ", genre=" + genre +
-                '}';
     }
 }
