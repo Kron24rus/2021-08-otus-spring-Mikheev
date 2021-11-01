@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add comment page</title>
+    <th:block th:include="~{fragments/libraryfragments :: commonstyles}"></th:block>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 mt-5">
+            <form th:action="@{/addcomment(bookId=${bookId})}" th:method="post" th:object="${comment}"
+                  id="edit-form" action="addcomment.html">
+                <div class="form-group">
+                    <h1>Add comment:</h1>
+                    <div class="row">
+                        <label for="holder-input">Text:</label>
+                        <input th:value="*{text}"
+                               id="holder-input" name="text" type="text" value=""/>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+            <div th:insert="~{fragments/libraryfragments :: home}"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
