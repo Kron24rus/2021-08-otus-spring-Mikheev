@@ -3,41 +3,36 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Edit comment page</title>
-    <style type="text/css">
-        body {
-            padding: 50px;
-        }
-
-        .books, .books td {
-            border: 1px solid lightgray;
-            padding: 5px;
-        }
-    </style>
+    <th:block th:include="~{fragments/libraryfragments :: commonstyles}"></th:block>
 </head>
 <body>
-
-<form id="edit-form" action="editcomment.html"
-      th:action="@{/editcomment(bookId=${bookId}, id=*{id})}" th:method="post" th:object="${comment}">
-    <h1>Edit comment:</h1>
-
+<div class="container">
     <div class="row">
-        <label for="id-input">ID:</label>
-        <input th:value="*{id}"
-               id="id-input" type="text" readonly="readonly" value="1"/>
+        <div class="col-md-4 mt-5">
+            <form id="edit-form" action="editcomment.html"
+                  th:action="@{/editcomment(bookId=${bookId}, id=*{id})}" th:method="post" th:object="${comment}">
+                <div class="form-group">
+                    <h1>Edit comment:</h1>
+
+                    <div class="row">
+                        <label for="id-input">ID:</label>
+                        <input th:value="*{id}"
+                               id="id-input" type="text" readonly="readonly" value="1"/>
+                    </div>
+
+                    <div class="row">
+                        <label for="holder-input">Text:</label>
+                        <input th:value="*{text}"
+                               id="holder-input" name="text" type="text" value="Comment"/>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+
+            <div th:insert="~{fragments/libraryfragments :: home}"></div>
+        </div>
     </div>
-
-    <div class="row">
-        <label for="holder-input">Text:</label>
-        <input th:value="*{text}"
-               id="holder-input" name="text" type="text" value="Comment"/>
-    </div>
-
-    <div class="row">
-        <button type="submit">Save</button>
-    </div>
-</form>
-
-<div th:insert="~{fragments/homenavigation :: home}"></div>
-
+</div>
 </body>
 </html>

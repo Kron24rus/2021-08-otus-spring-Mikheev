@@ -3,35 +3,29 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Add comment page</title>
-    <style type="text/css">
-        body {
-            padding: 50px;
-        }
-
-        .books, .books td {
-            border: 1px solid lightgray;
-            padding: 5px;
-        }
-    </style>
+    <th:block th:include="~{fragments/libraryfragments :: commonstyles}"></th:block>
 </head>
 <body>
-
-<form id="edit-form" action="addcomment.html"
-      th:action="@{/addcomment(bookId=${bookId})}" th:method="post" th:object="${comment}">
-    <h1>Add comment:</h1>
-
+<div class="container">
     <div class="row">
-        <label for="holder-input">Text:</label>
-        <input th:value="*{text}"
-               id="holder-input" name="text" type="text" value=""/>
-    </div>
+        <div class="col-md-4 mt-5">
+            <form th:action="@{/addcomment(bookId=${bookId})}" th:method="post" th:object="${comment}"
+                  id="edit-form" action="addcomment.html">
+                <div class="form-group">
+                    <h1>Add comment:</h1>
+                    <div class="row">
+                        <label for="holder-input">Text:</label>
+                        <input th:value="*{text}"
+                               id="holder-input" name="text" type="text" value=""/>
+                    </div>
 
-    <div class="row">
-        <button type="submit">Save</button>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+            <div th:insert="~{fragments/libraryfragments :: home}"></div>
+        </div>
     </div>
-</form>
-
-<div th:insert="~{fragments/homenavigation :: home}"></div>
+</div>
 
 </body>
 </html>

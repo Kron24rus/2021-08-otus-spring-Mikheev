@@ -2,7 +2,10 @@ package com.mikheev.homework.controller;
 
 
 import com.mikheev.homework.domain.Book;
+import com.mikheev.homework.service.AuthorService;
 import com.mikheev.homework.service.BookService;
+import com.mikheev.homework.service.CommentService;
+import com.mikheev.homework.service.GenreService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,6 +32,12 @@ public class BookControllerTest {
 
     @MockBean
     private BookService bookService;
+    @MockBean
+    private AuthorService authorService;
+    @MockBean
+    private GenreService genreService;
+    @MockBean
+    private CommentService commentService;
 
     @Test
     void test() throws Exception {
