@@ -9,9 +9,9 @@ public interface CommentService {
 
     List<Comment> getBookComments(long id);
 
-    void addComment(long bookId, Comment comment);
+    Comment addComment(long bookId, Comment comment);
 
-    void updateComment(Comment comment);
+    Comment updateComment(Comment comment);
 
     void deleteComment(long commentId);
 }

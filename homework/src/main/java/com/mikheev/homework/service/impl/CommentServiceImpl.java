@@ -28,21 +28,20 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void addComment(long bookId, Comment comment) {
+    public Comment addComment(long bookId, Comment comment) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new NotFoundException("Book with id " + bookId + " not found!"));
         comment.setBook(book);
-        commentRepository.save(comment);
+        return commentRepository.save(comment);
     }
 
     @Transactional
     @Override
-    public void updateComment(Comment comment) {
+    public Comment updateComment(Comment comment) {
         Comment databaseComment = commentRepository.findById(comment.getId())
                 .orElseThrow(() -> new NotFoundException("Comment with id " + comment.getId() + " not found!"));
         databaseComment.setText(comment.getText());
-        commentRepository.save(databaseComment);
-
+        return commentRepository.save(databaseComment);
     }
 
     @Transactional

@@ -3,7 +3,6 @@ package com.mikheev.homework.controller;
 import com.mikheev.homework.domain.Comment;
 import com.mikheev.homework.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,17 +13,9 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/addcomment")
-    public String addCommentPage(@RequestParam("bookId") long bookId, Model model) {
-        model.addAttribute("comment", new Comment());
-        model.addAttribute("bookId", bookId);
-        return "addcomment";
-    }
-
-    @PostMapping("addcomment")
-    public String addComment(@RequestParam("bookId") long bookId, Comment comment, Model model) {
-        commentService.addComment(bookId, comment);
-        return "redirect:/bookpage?id=" + bookId;
+    @PostMapping("/book/{id}/comment")
+    public Comment addComment(@PathVariable("id") long bookId, @RequestBody Comment comment) {
+        return commentService.addComment(bookId, comment);
     }
 
     @GetMapping("/editcomment")
@@ -34,16 +25,13 @@ public class CommentController {
         return "editcomment";
     }
 
-    @PostMapping("/editcomment")
-    public String editComment(@RequestParam("bookId") long bookId, Comment comment, Model model) {
-        commentService.updateComment(comment);
-        return "redirect:/bookpage?id=" + bookId;
+    @PutMapping("/comment")
+    public Comment updateBook(@RequestBody Comment comment) {
+        return commentService.updateComment(comment);
     }
 
-    @PostMapping("/deletecomment")
-    public String deleteComment(@RequestParam("id") long id,
-                                @RequestParam("bookId") long bookId, Model model) {
+    @DeleteMapping("/comment/{id}")
+    public void deleteComment(@PathVariable("id") long id) {
         commentService.deleteComment(id);
-        return "redirect:/bookpage?id=" + bookId;
     }
 }

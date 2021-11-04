@@ -39,13 +39,13 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void addBook(Book book) {
+    public Book addBook(Book book) {
         Author databaseAuthor = authorRepository.findById(book.getAuthor().getId())
                 .orElseThrow(() -> new NotFoundException("Author with id " + book.getAuthor().getId() + " not found!"));
         Genre databaseGenre = genreRepository.findById(book.getGenre().getId())
                 .orElseThrow(() -> new NotFoundException("Genre with id " + book.getGenre().getId() + " not found!"));
         Book bookToSave = new Book(book.getTitle(), databaseAuthor, databaseGenre);
-        bookRepository.save(bookToSave);
+        return bookRepository.save(bookToSave);
     }
 
     @Transactional

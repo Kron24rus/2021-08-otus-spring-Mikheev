@@ -2,6 +2,7 @@ package com.mikheev.homework.controller;
 
 
 import com.mikheev.homework.domain.Book;
+import com.mikheev.homework.exception.NotFoundException;
 import com.mikheev.homework.service.AuthorService;
 import com.mikheev.homework.service.BookService;
 import com.mikheev.homework.service.CommentService;
@@ -40,14 +41,21 @@ public class BookControllerTest {
     private CommentService commentService;
 
     @Test
-    void test() throws Exception {
-//        Book book1 = new Book();
-//        book1.setTitle(BOOK_TITLE);
-//        Book book2 = new Book();
-//        book2.setTitle(BOOK_TITLE);
-//        given(bookService.getAllBooks()).willReturn(List.of(book1, book2));
-//        this.mockMvc.perform(get("/booklist"))
-//                .andExpect(status().isOk()).andExpect(content().string(containsString(BOOK_TITLE)));
-//        verify(bookService, times(1)).getAllBooks();
+    void get_all_books_should_return_OK() throws Exception {
+        Book book1 = new Book();
+        book1.setTitle(BOOK_TITLE);
+        Book book2 = new Book();
+        book2.setTitle(BOOK_TITLE);
+        given(bookService.getAllBooks()).willReturn(List.of(book1, book2));
+        this.mockMvc.perform(get("/api/library/book"))
+                .andExpect(status().isOk());
+        verify(bookService, times(1)).getAllBooks();
+    }
+
+    @Test
+    void get_book_by_not_exist_id_should_return_404() throws Exception {
+        given(bookService.getBookWithAllAssociations(200)).willThrow(new NotFoundException());
+        mockMvc.perform(get("/api/library/book/200"))
+                .andExpect(status().isNotFound());
     }
 }

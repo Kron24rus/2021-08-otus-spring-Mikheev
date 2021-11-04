@@ -1,14 +1,17 @@
 package com.mikheev.homework.controller;
 
+import com.mikheev.homework.domain.Author;
 import com.mikheev.homework.domain.Book;
+import com.mikheev.homework.domain.Genre;
 import com.mikheev.homework.service.AuthorService;
 import com.mikheev.homework.service.BookService;
-import com.mikheev.homework.service.CommentService;
 import com.mikheev.homework.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,7 +21,6 @@ public class BookController {
     private final BookService bookService;
     private final AuthorService authorService;
     private final GenreService genreService;
-    private final CommentService commentService;
 
     @GetMapping("/book")
     public List<Book> bookList() {
@@ -30,37 +32,26 @@ public class BookController {
         return bookService.getBookWithAllAssociations(id);
     }
 
-//    @GetMapping("/addbook")
-//    public String addBookPage(Model model) {
-//        List<Author> authors = authorService.getAllAuthors();
-//        List<Genre> genres = genreService.getAllGenres();
-//        model.addAttribute("book", new Book());
-//        model.addAttribute("authors", authors);
-//        model.addAttribute("genres", genres);
-//        return "addbook";
-//    }
-//
-//    @PostMapping("addbook")
-//    public String addBook(Book book, Model model) {
-//        bookService.addBook(book);
-//        return "redirect:/booklist";
-//    }
-//
-//    @GetMapping("/editbook")
-//    public String editBookPage(@RequestParam("id") long id, Model model) {
-//        model.addAttribute("book", bookService.getBookWithAuthorAndGenre(id));
-//        model.addAttribute("authors", authorService.getAllAuthors());
-//        model.addAttribute("genres", genreService.getAllGenres());
-//        return "editbook";
-//    }
-//
-//    @PostMapping("/editbook")
-//    public String editBook(Book book, Model model) {
-//        Book savedBook = bookService.updateBook(book);
-//        model.addAttribute("book", savedBook);
-//        return "redirect:/bookpage?id=" + book.getId();
-//    }
-//
+    @GetMapping("/book/associations")
+    public Map<String, Object> loadEditCreateAssociations() {
+        Map<String, Object> responseMap = new HashMap<>();
+        List<Author> authors = authorService.getAllAuthors();
+        List<Genre> genres = genreService.getAllGenres();
+        responseMap.put("authors", authors);
+        responseMap.put("genres", genres);
+        return responseMap;
+    }
+
+    @PostMapping("/book")
+    public Book addBook(@RequestBody Book book) {
+        return bookService.addBook(book);
+    }
+
+    @PutMapping("/book")
+    public Book updateBook(@RequestBody Book book) {
+        return bookService.updateBook(book);
+    }
+
     @DeleteMapping("/book/{id}")
     public void deleteBook(@PathVariable("id") long id) {
         bookService.deleteBook(id);
