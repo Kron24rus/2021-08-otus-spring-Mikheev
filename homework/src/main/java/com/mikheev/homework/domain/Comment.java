@@ -1,5 +1,6 @@
 package com.mikheev.homework.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Comment {
     @Column(name = "text")
     private String text;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;

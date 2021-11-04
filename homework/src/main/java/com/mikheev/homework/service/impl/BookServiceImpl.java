@@ -32,8 +32,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public Book getBookWithAuthorAndGenre(long id) {
-        return bookRepository.findById(id, "book-with-author-genre")
+    public Book getBookWithAllAssociations(long id) {
+        return bookRepository.findById(id, "book-with-all-associations")
                 .orElseThrow(() -> new NotFoundException("Book with id " + id + " not found!"));
     }
 

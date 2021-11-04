@@ -8,7 +8,7 @@ public interface BookService {
 
     List<Book> getAllBooks();
 
-    Book getBookWithAuthorAndGenre(long id);
+    Book getBookWithAllAssociations(long id);
 
     void addBook(Book book);
 

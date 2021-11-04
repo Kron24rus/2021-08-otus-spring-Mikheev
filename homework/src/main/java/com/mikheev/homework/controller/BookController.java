@@ -6,9 +6,7 @@ import com.mikheev.homework.service.BookService;
 import com.mikheev.homework.service.CommentService;
 import com.mikheev.homework.service.GenreService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,20 +25,11 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
-//    @GetMapping("/book/{id}")
-//    public Book getBook() {
-//
-//    }
+    @GetMapping("/book/{id}")
+    public Book getBook(@PathVariable("id") long id) {
+        return bookService.getBookWithAllAssociations(id);
+    }
 
-//    @GetMapping("/bookpage")
-//    public String bookPage(@RequestParam("id") long id, Model model) {
-//        Book book = bookService.getBookWithAuthorAndGenre(id);
-//        List<Comment> comments = commentService.getBookComments(id);
-//        model.addAttribute("book", book);
-//        model.addAttribute("comments" , comments);
-//        return "bookpage";
-//    }
-//
 //    @GetMapping("/addbook")
 //    public String addBookPage(Model model) {
 //        List<Author> authors = authorService.getAllAuthors();
@@ -72,9 +61,8 @@ public class BookController {
 //        return "redirect:/bookpage?id=" + book.getId();
 //    }
 //
-//    @PostMapping("/deletebook")
-//    public String deleteBook(@RequestParam("id") long id, Model model) {
-//        bookService.deleteBook(id);
-//        return "redirect:/booklist";
-//    }
+    @DeleteMapping("/book/{id}")
+    public void deleteBook(@PathVariable("id") long id) {
+        bookService.deleteBook(id);
+    }
 }

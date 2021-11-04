@@ -54,8 +54,8 @@ class BookServiceImplTest {
         book.setTitle(ENTITY_NAME);
         book.setId(ENTITY_ID);
         Optional<Book> optionalBook = Optional.of(book);
-        when(bookRepository.findById(ENTITY_ID, "book-with-author-genre")).thenReturn(optionalBook);
-        Book foundBook = bookService.getBookWithAuthorAndGenre(ENTITY_ID);
+        when(bookRepository.findById(ENTITY_ID, "book-with-all-associations")).thenReturn(optionalBook);
+        Book foundBook = bookService.getBookWithAllAssociations(ENTITY_ID);
         assertThat(foundBook).isEqualTo(book);
     }
 
