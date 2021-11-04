@@ -10,6 +10,12 @@ export default {
   getBookList () {
     return apiClient.get('/book')
   },
+  getBook (bookId){
+    return apiClient.get('/book/' + bookId)
+  },
+  deleteBook (bookId) {
+    return apiClient.delete('/book/' + bookId)
+  },
   getAuthorList () {
     return apiClient.get('/author')
   },
