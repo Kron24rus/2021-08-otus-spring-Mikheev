@@ -65,7 +65,6 @@
                 let that = this;
                 apiService.getEditLibraryEntities()
                     .then(function (response) {
-                        console.log(response.data);
                         that.libraryEntities = response.data;
                     })
             },

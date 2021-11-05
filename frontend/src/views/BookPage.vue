@@ -164,9 +164,9 @@
 
             updateModelAfterDelete: function (commentId) {
                 let comments = this.book.comments;
-                Object.keys(comments).forEach(key => {
-                    if (comments[key].id === commentId) {
-                        comments.splice(key, 1);
+                Object.entries(comments).forEach(([key, value]) => {
+                    if (value.id === commentId) {
+                        comments.splice(key, 1)
                     }
                 })
             }
