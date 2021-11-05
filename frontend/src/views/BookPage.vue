@@ -108,12 +108,6 @@
             this.getBook(this.id);
         },
 
-        watch: {
-            '$route'() {
-                this.getBook(this.id);
-            }
-        },
-
         methods: {
             getBook: function (bookId) {
                 this.isLoading = true;
