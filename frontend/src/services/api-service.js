@@ -30,5 +30,8 @@ export default {
     },
     addBook(data) {
         return apiClient.post('/book', data);
+    },
+    deleteComment(commentId) {
+        return apiClient.delete('/comment/' + commentId);
     }
 }

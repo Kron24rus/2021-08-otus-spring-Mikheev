@@ -8,7 +8,11 @@
         |
         <router-link to="/genre">List of all genres</router-link>
     </div>
-    <router-view/>
+    <div class="container">
+        <div class="row">
+            <router-view/>
+        </div>
+    </div>
 </template>
 
 <style>

@@ -11,20 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final BookRepository bookRepository;
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Comment> getBookComments(long id) {
-        return commentRepository.findByBookId(id);
-    }
 
     @Transactional
     @Override
