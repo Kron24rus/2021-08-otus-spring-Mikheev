@@ -4,9 +4,11 @@
                @bookSaved="updateSavedBook">
     </book-edit>
     <comment-edit v-if="isEditComment"
+                  :comment-model="editedComment"
                   @commentSaved="updateComment">
     </comment-edit>
     <comment-add v-if="isAddComment"
+                 :book-id="id"
                  @commentAdded="updateCommentList">
     </comment-add>
     <div class="col-12" v-if="bookPageActive">
@@ -47,15 +49,19 @@
                 <td>{{ comment.id }}</td>
                 <td>{{ comment.text }}</td>
                 <td>
-                    <a href="#" @click="editComment">Edit</a>
+                    <a href="#"
+                       @click="editComment(comment)">Edit</a>
                 </td>
                 <td>
-                    <button class="btn btn-primary" v-on:click="deleteComment(comment.id)">Delete</button>
+                    <button class="btn btn-primary"
+                            v-on:click="deleteComment(comment.id)">Delete
+                    </button>
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
-                    <a href="#" @click="createComment()">Add Comment</a>
+                    <a href="#"
+                       @click="createComment()">Add Comment</a>
                 </td>
             </tr>
             </tbody>
@@ -87,7 +93,8 @@
                 isEditBook: false,
                 isEditComment: false,
                 isAddComment: false,
-                isLoading: false
+                isLoading: false,
+                editedComment: {}
             }
         },
 
@@ -118,11 +125,11 @@
                     })
             },
 
-            enableEditMode: function() {
+            enableEditMode: function () {
                 this.isEditBook = true;
             },
 
-            updateSavedBook: function(savedBook) {
+            updateSavedBook: function (savedBook) {
                 this.book.title = savedBook.title;
                 this.book.author = savedBook.author;
                 this.book.genre = savedBook.genre;
@@ -133,15 +140,23 @@
                 this.isAddComment = true;
             },
 
-            updateCommentList: function () {
+            updateCommentList: function (addedComment) {
+                this.book.comments.push(addedComment);
                 this.isAddComment = false;
             },
 
-            editComment: function () {
+            editComment: function (comment) {
                 this.isEditComment = true;
+                this.editedComment = comment;
             },
 
-            updateComment: function () {
+            updateComment: function (savedComment) {
+                let comments = this.book.comments;
+                Object.keys(comments).forEach(key => {
+                    if (comments[key].id === savedComment.id) {
+                        comments[key].text = savedComment.text;
+                    }
+                });
                 this.isEditComment = false;
             },
 

@@ -9,7 +9,8 @@
             </div>
             <div>
                 <label for="authorSelect">Choose author:</label>
-                <select id="authorSelect" class="form-control" v-model="selectedAuthor">
+                <select id="authorSelect" class="form-control"
+                        v-model="selectedAuthor">
                     <option v-for="author in libraryEntities.authors"
                             :value="author">{{ author.name }}
                     </option>
@@ -17,13 +18,16 @@
             </div>
             <div>
                 <label for="genreSelect">Choose genre:</label>
-                <select id="genreSelect" class="form-control" v-model="selectedGenre">
+                <select id="genreSelect" class="form-control"
+                        v-model="selectedGenre">
                     <option v-for="genre in libraryEntities.genres"
                             :value="genre">{{ genre.name }}
                     </option>
                 </select>
             </div>
-            <button class="btn btn-primary" v-on:click="addBook()">Save</button>
+            <button class="btn btn-primary"
+                    v-on:click="addBook()">Save
+            </button>
         </div>
     </div>
 </template>

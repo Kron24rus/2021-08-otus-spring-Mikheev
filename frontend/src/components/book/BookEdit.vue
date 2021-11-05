@@ -4,7 +4,8 @@
             <h1>Edit book</h1>
             <div>
                 <label for="id-input">ID:</label>
-                <input id="id-input" type="text" readonly="readonly" :value="bookModel.id"/>
+                <input id="id-input" type="text" readonly="readonly"
+                       :value="bookModel.id"/>
             </div>
 
             <div>
@@ -30,7 +31,9 @@
                     </option>
                 </select>
             </div>
-            <button class="btn btn-primary" v-on:click="saveBook()">Save</button>
+            <button class="btn btn-primary"
+                    v-on:click="saveBook()">Save
+            </button>
         </div>
     </div>
 </template>
@@ -76,7 +79,6 @@
                     .then(function (response) {
                         that.$emit('bookSaved', response.data);
                     });
-
             }
         }
     }

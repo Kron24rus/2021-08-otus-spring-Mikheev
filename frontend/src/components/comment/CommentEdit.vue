@@ -4,13 +4,17 @@
             <h1>Edit comment</h1>
             <div class="row">
                 <label for="id-input">ID:</label>
-                <input id="id-input" type="text" readonly="readonly" value="1"/>
+                <input id="id-input" type="text" readonly="readonly"
+                       :value="commentModel.id"/>
             </div>
             <div class="row">
                 <label for="holder-input">Text:</label>
-                <input id="holder-input" name="text" type="text" value="Comment"/>
+                <input id="holder-input" name="text" type="text"
+                       v-model="commentText"/>
             </div>
-            <button class="btn btn-primary" v-on:click="saveComment()">Save</button>
+            <button class="btn btn-primary"
+                    v-on:click="saveComment()">Save
+            </button>
         </div>
     </div>
 </template>
@@ -20,27 +24,28 @@
 
     export default {
         name: "CommentEdit",
-        // props: [
-        //     'bookModel'
-        // ],
-        // data: function () {
-        //     return {
-        //         libraryEntities: {},
-        //         bookTitle: '',
-        //         selectedAuthor: {},
-        //         selectedGenre: {}
-        //     }
-        // },
-        // mounted: function () {
-        //     this.selectedAuthor = this.bookModel.author;
-        //     this.selectedGenre = this.bookModel.genre;
-        //     this.bookTitle = this.bookModel.title;
-        //     this.loadLibraryEntities();
-        // },
+        props: [
+            'commentModel'
+        ],
+        data: function () {
+            return {
+                commentText: '',
+                selectedAuthor: {},
+                selectedGenre: {}
+            }
+        },
+        mounted: function () {
+            this.commentText = this.commentModel.text;
+        },
         methods: {
             saveComment: function () {
                 let that = this;
-                this.$emit('commentSaved');
+                let commentToSave = Object.assign({}, this.commentModel);
+                commentToSave.text = this.commentText;
+                apiService.saveUpdatedComment(commentToSave)
+                    .then(function (response) {
+                        that.$emit('commentSaved', response.data);
+                    });
             }
         }
     }

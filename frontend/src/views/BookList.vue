@@ -20,7 +20,9 @@
                     <router-link :to="{ name: 'Book page', params: { id: book.id }}">Info</router-link>
                 </td>
                 <td>
-                    <button class="btn btn-primary" v-on:click="deleteBook(book.id)">Delete</button>
+                    <button class="btn btn-primary"
+                            v-on:click="deleteBook(book.id)">Delete
+                    </button>
                 </td>
             </tr>
             <tr>
@@ -71,7 +73,7 @@
                 this.isCreateMode = true;
             },
 
-            updateBookList: function(addedBook) {
+            updateBookList: function (addedBook) {
                 this.books.push(addedBook);
                 this.isCreateMode = false;
             },
