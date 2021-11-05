@@ -1,5 +1,15 @@
 <template>
-    <div class="col-12">
+    <book-edit v-if="isEditBook"
+               :book-model="book"
+               @bookSaved="updateSavedBook">
+    </book-edit>
+    <comment-edit v-if="isEditComment"
+                  @commentSaved="updateComment">
+    </comment-edit>
+    <comment-add v-if="isAddComment"
+                 @commentAdded="updateCommentList">
+    </comment-add>
+    <div class="col-12" v-if="bookPageActive">
         <h1>Book info</h1>
         <table class="table">
             <thead>
@@ -18,7 +28,7 @@
                 <td>{{ book.author.name }}</td>
                 <td>{{ book.genre.name }}</td>
                 <td>
-                    <a href="#">Edit</a>
+                    <a href="#" @click="enableEditMode()">Edit</a>
                 </td>
             </tr>
             </tbody>
@@ -37,7 +47,7 @@
                 <td>{{ comment.id }}</td>
                 <td>{{ comment.text }}</td>
                 <td>
-                    <a href="#">Edit</a>
+                    <a href="#" @click="editComment">Edit</a>
                 </td>
                 <td>
                     <button class="btn btn-primary" v-on:click="deleteComment(comment.id)">Delete</button>
@@ -45,7 +55,7 @@
             </tr>
             <tr>
                 <td colspan="4">
-                    <a href="#">Add Comment</a>
+                    <a href="#" @click="createComment()">Add Comment</a>
                 </td>
             </tr>
             </tbody>
@@ -54,17 +64,36 @@
 </template>
 
 <script>
-    import apiService from '../services/api-service'
+    import apiService from '../services/api-service';
+    import BookEdit from '@/components/book/BookEdit.vue';
+    import CommentAdd from '@/components/comment/CommentAdd.vue';
+    import CommentEdit from '@/components/comment/CommentEdit.vue';
 
     export default {
         name: "BookPage",
 
         props: ['id'],
 
+        components: {
+            BookEdit,
+            CommentAdd,
+            CommentEdit
+        },
+
         data: function () {
             return {
                 book: {},
-                selectedGenre: {}
+                selectedGenre: {},
+                isEditBook: false,
+                isEditComment: false,
+                isAddComment: false,
+                isLoading: false
+            }
+        },
+
+        computed: {
+            bookPageActive: function () {
+                return !(this.isEditBook || this.isEditComment || this.isAddComment || this.isLoading);
             }
         },
 
@@ -80,11 +109,40 @@
 
         methods: {
             getBook: function (bookId) {
+                this.isLoading = true;
                 let that = this;
                 apiService.getBook(bookId)
                     .then(function (response) {
                         that.book = response.data;
+                        that.isLoading = false;
                     })
+            },
+
+            enableEditMode: function() {
+                this.isEditBook = true;
+            },
+
+            updateSavedBook: function(savedBook) {
+                this.book.title = savedBook.title;
+                this.book.author = savedBook.author;
+                this.book.genre = savedBook.genre;
+                this.isEditBook = false;
+            },
+
+            createComment: function () {
+                this.isAddComment = true;
+            },
+
+            updateCommentList: function () {
+                this.isAddComment = false;
+            },
+
+            editComment: function () {
+                this.isEditComment = true;
+            },
+
+            updateComment: function () {
+                this.isEditComment = false;
             },
 
             deleteComment: function (commentId) {
@@ -96,8 +154,11 @@
             },
 
             updateModelAfterDelete: function (commentId) {
-                Object.keys(this.book).forEach(key => {
-
+                let comments = this.book.comments;
+                Object.keys(comments).forEach(key => {
+                    if (comments[key].id === commentId) {
+                        comments.splice(key, 1);
+                    }
                 })
             }
         }

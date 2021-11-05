@@ -1,9 +1,7 @@
 <template>
-    <!--    <book-info :book-model="book" v-if="isBookView">-->
-    <!--    </book-info>-->
-    <!--    <book-edit :book-model="book" v-if="isBookView">-->
-    <!--    </book-edit>-->
-    <div class="col-12">
+    <book-add v-if="isCreateMode"
+              @bookAdded="updateBookList"></book-add>
+    <div v-else class="col-12">
         <h1>Books</h1>
         <table class="table">
             <thead>
@@ -37,20 +35,18 @@
 
 <script>
     import apiService from '@/services/api-service';
-    import BookEdit from '@/components/book/BookEdit.vue';
     import BookAdd from '@/components/book/BookAdd.vue';
 
     export default {
         name: "BookList",
 
         components: {
-            'book-edit': BookEdit,
-            'book-add': BookAdd
+            BookAdd
         },
 
         data: function () {
             return {
-                isBookView: false,
+                isCreateMode: false,
                 books: {},
                 book: {}
             }
@@ -72,7 +68,12 @@
             },
 
             createBook: function () {
+                this.isCreateMode = true;
+            },
 
+            updateBookList: function(addedBook) {
+                this.books.push(addedBook);
+                this.isCreateMode = false;
             },
 
             deleteBook: function (bookId) {

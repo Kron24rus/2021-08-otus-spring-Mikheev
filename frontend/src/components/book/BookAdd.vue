@@ -1,7 +1,7 @@
 <template>
     <div class="col-12">
         <div class="form-group">
-            <h1>Add book:</h1>
+            <h1>Add book</h1>
             <div>
                 <label for="holder-input">Title:</label>
                 <input id="holder-input" name="title" type="text"
@@ -54,6 +54,7 @@
                     })
             },
             addBook: function () {
+                let that = this;
                 let bookToAdd = {
                     title: this.bookTitle,
                     author: this.selectedAuthor,
@@ -61,7 +62,7 @@
                 };
                 apiService.addBook(bookToAdd)
                     .then(function (response) {
-                        console.log(response.data);
+                        that.$emit('bookAdded', response.data);
                     })
             }
         }

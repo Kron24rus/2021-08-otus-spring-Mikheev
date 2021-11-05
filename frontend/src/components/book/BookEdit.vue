@@ -1,7 +1,7 @@
 <template>
     <div class="col-12">
         <div class="form-group">
-            <h1>Edit book:</h1>
+            <h1>Edit book</h1>
             <div>
                 <label for="id-input">ID:</label>
                 <input id="id-input" type="text" readonly="readonly" :value="bookModel.id"/>
@@ -67,14 +67,16 @@
                     })
             },
             saveBook: function () {
+                let that = this;
                 let bookToSave = Object.assign({}, this.bookModel);
                 bookToSave.title = this.bookTitle;
                 bookToSave.author = this.selectedAuthor;
                 bookToSave.genre = this.selectedGenre;
                 apiService.saveUpdatedBook(bookToSave)
                     .then(function (response) {
-                        console.log(response.data);
-                    })
+                        that.$emit('bookSaved', response.data);
+                    });
+
             }
         }
     }
