@@ -6,6 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 @DataMongoTest
 @EnableConfigurationProperties
-@ComponentScan({"com.mikheev.homework.repositories"})
+@ComponentScan({"com.mikheev.homework.repositories", "com.mikheev.homework.configuration"})
 public class AbstractTestRepository {
 }

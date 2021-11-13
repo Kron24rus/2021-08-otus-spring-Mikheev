@@ -1,8 +1,11 @@
 package com.mikheev.homework.configuration;
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
+import com.mikheev.homework.repositories.AuthorRepository;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -13,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+@EnableMongock
+@EnableMongoRepositories(basePackageClasses = AuthorRepository.class)
 @Configuration
 public class LibraryConfiguration {
 

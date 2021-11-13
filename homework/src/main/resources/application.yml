@@ -9,5 +9,5 @@ server:
   port: 8098
 
 mongock:
-  runner-type: "InitializingBean"
+  runner-type: InitializingBean
   change-logs-scan-package: com.mikheev.homework.mongock.changelog
