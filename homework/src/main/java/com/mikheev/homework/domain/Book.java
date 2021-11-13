@@ -1,55 +1,43 @@
 package com.mikheev.homework.domain;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = {"comments"})
-@NamedEntityGraphs({
-        @NamedEntityGraph(
-                name = "book-with-all-associations",
-                attributeNodes = {
-                        @NamedAttributeNode("author"),
-                        @NamedAttributeNode("genre"),
-                        @NamedAttributeNode("comments")
-                }),
-        @NamedEntityGraph(
-                name = "book-with-author-genre",
-                attributeNodes = {
-                        @NamedAttributeNode("author"),
-                        @NamedAttributeNode("genre")
-                }
-        )
-})
-@Entity
-@Table(name = "books")
+@Document(collection = "books")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "title")
     private String title;
 
-    @ManyToOne(targetEntity = Author.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
+    @DBRef
     private Author author;
 
-    @ManyToOne(targetEntity = Genre.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "genre_id")
+    @DBRef
     private Genre genre;
 
-    @OneToMany(mappedBy = "book", cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            fetch = FetchType.LAZY, orphanRemoval = true)
+    @DBRef(lazy = true)
     private List<Comment> comments;
 
     public Book(String title, Author author, Genre genre) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+    }
+
+    public Book(String id, String title, Author author, Genre genre) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.genre = genre;

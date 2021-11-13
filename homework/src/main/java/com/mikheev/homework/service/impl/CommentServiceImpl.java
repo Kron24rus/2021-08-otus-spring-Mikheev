@@ -20,7 +20,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Comment addComment(long bookId, Comment comment) {
+    public Comment addComment(String bookId, Comment comment) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new NotFoundException("Book with id " + bookId + " not found!"));
         comment.setBook(book);
@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void deleteComment(long commentId) {
+    public void deleteComment(String commentId) {
         commentRepository.deleteById(commentId);
     }
 }

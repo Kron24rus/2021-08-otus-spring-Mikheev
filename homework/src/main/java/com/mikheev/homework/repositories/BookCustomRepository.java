@@ -6,5 +6,7 @@ import java.util.Optional;
 
 public interface BookCustomRepository {
 
-    Optional<Book> findById(long id, String entityGraphName);
+    Optional<Book> findByIdWithComments(String id);
+
+    void deleteByIdCascadeComments(String id);
 }

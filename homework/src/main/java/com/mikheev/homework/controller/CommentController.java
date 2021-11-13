@@ -13,7 +13,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/book/{id}/comment")
-    public Comment addComment(@PathVariable("id") long bookId, @RequestBody Comment comment) {
+    public Comment addComment(@PathVariable("id") String bookId, @RequestBody Comment comment) {
         return commentService.addComment(bookId, comment);
     }
 
@@ -23,7 +23,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/comment/{id}")
-    public void deleteComment(@PathVariable("id") long id) {
+    public void deleteComment(@PathVariable("id") String id) {
         commentService.deleteComment(id);
     }
 }

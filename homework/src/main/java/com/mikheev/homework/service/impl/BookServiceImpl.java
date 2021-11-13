@@ -32,8 +32,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public Book getBookWithAllAssociations(long id) {
-        return bookRepository.findById(id, "book-with-all-associations")
+    public Book getBookWithAllAssociations(String id) {
+        return bookRepository.findByIdWithComments(id)
                 .orElseThrow(() -> new NotFoundException("Book with id " + id + " not found!"));
     }
 
@@ -65,7 +65,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void deleteBook(long id) {
-        bookRepository.deleteById(id);
+    public void deleteBook(String id) {
+        bookRepository.deleteByIdCascadeComments(id);
     }
 }

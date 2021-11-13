@@ -28,7 +28,7 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}")
-    public Book getBook(@PathVariable("id") long id) {
+    public Book getBook(@PathVariable("id") String id) {
         return bookService.getBookWithAllAssociations(id);
     }
 
@@ -53,7 +53,7 @@ public class BookController {
     }
 
     @DeleteMapping("/book/{id}")
-    public void deleteBook(@PathVariable("id") long id) {
+    public void deleteBook(@PathVariable("id") String id) {
         bookService.deleteBook(id);
     }
 }

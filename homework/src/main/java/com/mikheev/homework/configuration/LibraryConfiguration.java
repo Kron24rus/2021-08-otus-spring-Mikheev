@@ -1,6 +1,5 @@
 package com.mikheev.homework.configuration;
 
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +15,6 @@ import java.util.regex.Pattern;
 
 @Configuration
 public class LibraryConfiguration {
-
-    @Bean
-    public Hibernate5Module hibernate5Module() {
-        return new Hibernate5Module();
-    }
 
     @Bean
     public FilterRegistrationBean spaRedirectFiler() {

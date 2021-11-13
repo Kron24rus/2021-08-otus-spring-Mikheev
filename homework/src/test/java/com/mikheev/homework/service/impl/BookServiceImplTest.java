@@ -24,13 +24,13 @@ import static org.mockito.Mockito.*;
 @Import(BookServiceImpl.class)
 class BookServiceImplTest {
 
-    private static final long ENTITY_ID = 153;
+    private static final String ENTITY_ID = "153";
     private static final String ENTITY_NAME = "entityName";
     private static final String NEW_ENTITY_NAME = "newEntityName";
-    private static final long AUTHOR_ID = 145;
-    private static final long NEW_AUTHOR_ID = 255;
-    private static final long GENRE_ID = 22;
-    private static final long NEW_GENRE_ID = 33;
+    private static final String AUTHOR_ID = "145";
+    private static final String NEW_AUTHOR_ID = "255";
+    private static final String GENRE_ID = "22";
+    private static final String NEW_GENRE_ID = "33";
 
     @MockBean
     private BookRepository bookRepository;
@@ -54,7 +54,7 @@ class BookServiceImplTest {
         book.setTitle(ENTITY_NAME);
         book.setId(ENTITY_ID);
         Optional<Book> optionalBook = Optional.of(book);
-        when(bookRepository.findById(ENTITY_ID, "book-with-all-associations")).thenReturn(optionalBook);
+        when(bookRepository.findByIdWithComments(ENTITY_ID)).thenReturn(optionalBook);
         Book foundBook = bookService.getBookWithAllAssociations(ENTITY_ID);
         assertThat(foundBook).isEqualTo(book);
     }
@@ -94,7 +94,7 @@ class BookServiceImplTest {
     @Test
     void deleteBook_messageWithCorrectIdReturned() {
         bookService.deleteBook(ENTITY_ID);
-        verify(bookRepository, times(1)).deleteById(ENTITY_ID);
+        verify(bookRepository, times(1)).deleteByIdCascadeComments(ENTITY_ID);
     }
 
     @Test

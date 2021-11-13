@@ -5,42 +5,37 @@ import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Genre;
 import com.mikheev.homework.repositories.BookRepository;
 import lombok.val;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Tests for book repository")
-@DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-class BookRepositoryImplTest {
+class BookRepositoryImplTest extends AbstractTestRepository {
 
-    private static final long BOOK_ID = 1L;
+    private static final String BOOK_ID = "1";
     private static final int EXPECTED_NUMBER_OF_BOOKS = 3;
     private static final int EXPECTED_QUERIES_COUNT = 1;
     private static final String EXPECTED_BOOK_TITLE = "expectedBookTitle";
-    private static final long EXPECTED_BOOK_ID = 3;
+    private static final String EXPECTED_BOOK_ID = "3";
     private static final String GENRE_DETECTIVE = "detective";
     private static final String GENRE_COMEDY = "comedy";
-    private static final long GENRE_COMEDY_ID = 1;
+    private static final String GENRE_COMEDY_ID = "1";
     private static final String BOOK_TITLE_DETECTIVE = "detectiveBook";
 
     @Autowired
     private BookRepository bookRepository;
 
     @Autowired
-    private TestEntityManager entityManager;
+    private MongoTemplate mongoTemplate;
 
     @Test
     void findById_validBook() {
         val optionalFoundBook = bookRepository.findById(BOOK_ID);
-        val expectedBook = entityManager.find(Book.class, BOOK_ID);
+        val expectedBook = mongoTemplate.findById(BOOK_ID, Book.class);
         assertThat(optionalFoundBook).isPresent().get().usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
@@ -52,59 +47,56 @@ class BookRepositoryImplTest {
 
     @Test
     void findAllBooks_containsAllBooksWithAuthorAndGenre() {
-        SessionFactory sessionFactory = entityManager.getEntityManager().getEntityManagerFactory()
-                .unwrap(SessionFactory.class);
-        sessionFactory.getStatistics().setStatisticsEnabled(true);
-
         val books = bookRepository.findAll();
         assertThat(books).isNotNull().hasSize(EXPECTED_NUMBER_OF_BOOKS)
                 .allMatch(book -> !book.getTitle().isEmpty())
                 .allMatch(book -> book.getAuthor() != null)
                 .allMatch(book -> book.getGenre() != null);
-
-        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QUERIES_COUNT);
     }
 
+    @DirtiesContext
     @Test
     void saveBook_newBookSaved() {
-        Author author = entityManager.find(Author.class, 0L);
-        Genre genre = entityManager.find(Genre.class, 0L);
+        Author author = mongoTemplate.findById("0", Author.class);
+        Genre genre =  mongoTemplate.findById("0", Genre.class);
         Book newBook = new Book();
+        newBook.setId(EXPECTED_BOOK_ID);
         newBook.setTitle(EXPECTED_BOOK_TITLE);
         newBook.setAuthor(author);
         newBook.setGenre(genre);
         Book savedBook = bookRepository.save(newBook);
-        Book expectedBook = entityManager.find(Book.class, EXPECTED_BOOK_ID);
+        Book expectedBook = mongoTemplate.findById(EXPECTED_BOOK_ID, Book.class);
         assertThat(savedBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
+    @DirtiesContext
     @Test
     void saveBook_bookUpdated() {
-        Book book = entityManager.find(Book.class, BOOK_ID);
+        Book book = mongoTemplate.findById(BOOK_ID, Book.class);
         assertThat(book.getGenre().getName()).isEqualTo(GENRE_DETECTIVE);
         assertThat(book.getTitle()).isEqualTo(BOOK_TITLE_DETECTIVE);
 
-        Genre genre = entityManager.find(Genre.class, GENRE_COMEDY_ID);
+        Genre genre = mongoTemplate.findById(GENRE_COMEDY_ID, Genre.class);
         book.setTitle(EXPECTED_BOOK_TITLE);
         book.setGenre(genre);
 
         bookRepository.save(book);
-        Book savedBook = entityManager.find(Book.class, BOOK_ID);
+        Book savedBook = mongoTemplate.findById(BOOK_ID, Book.class);
 
         assertThat(savedBook.getTitle()).isEqualTo(EXPECTED_BOOK_TITLE);
         assertThat(savedBook.getGenre()).usingRecursiveComparison().isEqualTo(genre);
         assertThat(savedBook.getId()).isEqualTo(BOOK_ID);
     }
 
+    @DirtiesContext
     @Test
     void deleteBook_success() {
-        Book book = entityManager.find(Book.class, BOOK_ID);
+        Book book = mongoTemplate.findById(BOOK_ID, Book.class);
         assertThat(book).isNotNull();
-        entityManager.detach(book);
 
         bookRepository.deleteById(BOOK_ID);
 
-        Book expectedNullBook = entityManager.find(Book.class, BOOK_ID);
+        Book expectedNullBook = mongoTemplate.findById(BOOK_ID, Book.class);
         assertThat(expectedNullBook).isNull();
     }
 }

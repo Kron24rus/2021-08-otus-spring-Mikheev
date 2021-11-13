@@ -8,11 +8,11 @@ public interface BookService {
 
     List<Book> getAllBooks();
 
-    Book getBookWithAllAssociations(long id);
+    Book getBookWithAllAssociations(String id);
 
     Book addBook(Book book);
 
     Book updateBook(Book book);
 
-    void deleteBook(long id);
+    void deleteBook(String id);
 }
