@@ -89,6 +89,7 @@
         data: function () {
             return {
                 book: {},
+                bookModel: {},
                 selectedGenre: {},
                 isEditBook: false,
                 isEditComment: false,
@@ -114,7 +115,9 @@
                 let that = this;
                 apiService.getBook(bookId)
                     .then(function (response) {
-                        that.book = response.data;
+                        that.bookModel = response.data;
+                        that.book = that.bookModel.book;
+                        that.book.comments = that.bookModel.comments;
                         that.isLoading = false;
                     })
             },

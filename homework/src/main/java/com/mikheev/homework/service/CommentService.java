@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface CommentService {
 
+    List<Comment> getBookComments(String bookId);
+
     Comment addComment(String bookId, Comment comment);
 
     Comment updateComment(Comment comment);

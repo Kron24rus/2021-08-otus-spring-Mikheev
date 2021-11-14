@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"comments"})
 @Document(collection = "books")
 public class Book {
 
@@ -27,17 +26,7 @@ public class Book {
     @DBRef
     private Genre genre;
 
-    @DBRef(lazy = true)
-    private List<Comment> comments;
-
     public Book(String title, Author author, Genre genre) {
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
-    }
-
-    public Book(String id, String title, Author author, Genre genre) {
-        this.id = id;
         this.title = title;
         this.author = author;
         this.genre = genre;

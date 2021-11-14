@@ -1,10 +1,13 @@
 package com.mikheev.homework.controller;
 
+import com.mikheev.homework.controller.model.BookModel;
 import com.mikheev.homework.domain.Author;
 import com.mikheev.homework.domain.Book;
+import com.mikheev.homework.domain.Comment;
 import com.mikheev.homework.domain.Genre;
 import com.mikheev.homework.service.AuthorService;
 import com.mikheev.homework.service.BookService;
+import com.mikheev.homework.service.CommentService;
 import com.mikheev.homework.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ public class BookController {
     private final BookService bookService;
     private final AuthorService authorService;
     private final GenreService genreService;
+    private final CommentService commentService;
 
     @GetMapping("/book")
     public List<Book> bookList() {
@@ -28,8 +32,10 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}")
-    public Book getBook(@PathVariable("id") String id) {
-        return bookService.getBookWithAllAssociations(id);
+    public BookModel getBook(@PathVariable("id") String id) {
+        Book book = bookService.getBookWithAllAssociations(id);
+        List<Comment> bookComments = commentService.getBookComments(id);
+        return new BookModel(book, bookComments);
     }
 
     @GetMapping("/book/associations")
