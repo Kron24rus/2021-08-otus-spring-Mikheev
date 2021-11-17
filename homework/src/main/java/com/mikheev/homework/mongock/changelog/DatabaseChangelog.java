@@ -2,16 +2,12 @@ package com.mikheev.homework.mongock.changelog;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
+import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.decorator.impl.MongockTemplate;
 import com.mikheev.homework.domain.Author;
 import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Comment;
 import com.mikheev.homework.domain.Genre;
-import com.mikheev.homework.repositories.AuthorRepository;
-import com.mikheev.homework.repositories.BookRepository;
-import com.mikheev.homework.repositories.CommentRepository;
-import com.mikheev.homework.repositories.GenreRepository;
 import com.mongodb.client.MongoDatabase;
-import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,19 +22,18 @@ public class DatabaseChangelog {
     }
 
     @ChangeSet(order = "002", id = "insertData", author = "AlexanderMikheev", runAlways = true)
-    public void insertData(GenreRepository genreRepository, AuthorRepository authorRepository,
-                           BookRepository bookRepository, CommentRepository commentRepository) {
+    public void insertData(MongockTemplate mongoTemplate) {
 
         Genre detectiveGenre = new Genre("0", "detective");
         Genre comedyGenre = new Genre("1", "comedy");
         Genre criminalGenre = new Genre("2", "criminal");
         Genre fantasyGenre = new Genre("3", "fantasy");
-        genreRepository.saveAll(Arrays.asList(detectiveGenre, comedyGenre, criminalGenre, fantasyGenre));
+        mongoTemplate.insertAll(Arrays.asList(detectiveGenre, comedyGenre, criminalGenre, fantasyGenre));
 
         Author author0 = new Author("0", "AuthorOfDetectiveAndComedy");
         Author author1 = new Author("1", "TalentedAuthor");
         Author author2 = new Author("2", "BadAndBoringAuthor");
-        authorRepository.saveAll(Arrays.asList(author0, author1, author2));
+        mongoTemplate.insertAll(Arrays.asList(author0, author1, author2));
 
         Book book0 = new Book("0", "comedyBook", author0, comedyGenre);
         Book book1 = new Book("1", "detectiveBook", author0, detectiveGenre);
@@ -48,7 +43,7 @@ public class DatabaseChangelog {
         Book book5 = new Book("5", "criminalBookOfTalented", author1, criminalGenre);
         Book book6 = new Book("6", "detectiveOfBadAuthor", author2, detectiveGenre);
         Book book7 = new Book("7", "comedyOfBoringAuthor", author2, comedyGenre);
-        bookRepository.saveAll(Arrays.asList(book0, book1, book2, book3, book4, book5, book6, book7));
+        mongoTemplate.insertAll(Arrays.asList(book0, book1, book2, book3, book4, book5, book6, book7));
 
         List<Comment> comments = new ArrayList<>();
         comments.add(new Comment("1", "positive comment", book0));
@@ -80,7 +75,6 @@ public class DatabaseChangelog {
         comments.add(new Comment("27", "neutral comment", book5));
         comments.add(new Comment("28", "positive comment", book6));
         comments.add(new Comment("29", "negative comment", book7));
-
-        commentRepository.saveAll(comments);
+        mongoTemplate.insertAll(comments);
     }
 }

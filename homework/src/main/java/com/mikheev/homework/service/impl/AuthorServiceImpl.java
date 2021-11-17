@@ -14,11 +14,11 @@ import java.util.List;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorRepository authorRepository;
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Author> getAllAuthors() {
-        return authorRepository.findAll();
-    }
+//    private final AuthorRepository authorRepository;
+//
+//    @Transactional(readOnly = true)
+//    @Override
+//    public List<Author> getAllAuthors() {
+//        return authorRepository.findAll();
+//    }
 }

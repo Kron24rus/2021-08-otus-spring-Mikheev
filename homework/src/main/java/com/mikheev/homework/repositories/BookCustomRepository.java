@@ -1,12 +1,11 @@
 package com.mikheev.homework.repositories;
 
 import com.mikheev.homework.domain.Book;
-
-import java.util.Optional;
+import reactor.core.publisher.Mono;
 
 public interface BookCustomRepository {
 
-    Optional<Book> findByIdWithComments(String id);
+    Mono<Book> findByIdWithComments(String id);
 
     void deleteByIdCascadeComments(String id);
 }

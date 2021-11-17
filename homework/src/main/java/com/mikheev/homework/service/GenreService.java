@@ -5,6 +5,6 @@ import com.mikheev.homework.domain.Genre;
 import java.util.List;
 
 public interface GenreService {
-
-    List<Genre> getAllGenres();
+//
+//    List<Genre> getAllGenres();
 }

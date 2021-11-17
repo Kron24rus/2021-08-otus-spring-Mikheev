@@ -5,6 +5,6 @@ import com.mikheev.homework.domain.Author;
 import java.util.List;
 
 public interface AuthorService {
-
-    List<Author> getAllAuthors();
+//
+//    List<Author> getAllAuthors();
 }

@@ -1,4 +1,4 @@
-package com.mikheev.homework.controller.model;
+package com.mikheev.homework.controller.dto;
 
 import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Comment;
@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class BookModel {
+public class BookDto {
 
     Book book;
     List<Comment> comments;

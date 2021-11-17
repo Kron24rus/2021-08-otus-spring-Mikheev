@@ -1,7 +1,7 @@
 package com.mikheev.homework.repositories;
 
 import com.mikheev.homework.domain.Book;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-public interface BookRepository extends MongoRepository<Book, String>, BookCustomRepository {
+public interface BookRepository extends ReactiveMongoRepository<Book, String>, BookCustomRepository {
 }

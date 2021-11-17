@@ -17,35 +17,35 @@ import java.util.List;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    private final CommentRepository commentRepository;
-    private final BookRepository bookRepository;
-
-    @Override
-    public List<Comment> getBookComments(String bookId) {
-        return commentRepository.findByBookId(bookId);
-    }
-
-    @Transactional
-    @Override
-    public Comment addComment(String bookId, Comment comment) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new NotFoundException("Book with id " + bookId + " not found!"));
-        comment.setBook(book);
-        return commentRepository.save(comment);
-    }
-
-    @Transactional
-    @Override
-    public Comment updateComment(Comment comment) {
-        Comment databaseComment = commentRepository.findById(comment.getId())
-                .orElseThrow(() -> new NotFoundException("Comment with id " + comment.getId() + " not found!"));
-        databaseComment.setText(comment.getText());
-        return commentRepository.save(databaseComment);
-    }
-
-    @Transactional
-    @Override
-    public void deleteComment(String commentId) {
-        commentRepository.deleteById(commentId);
-    }
+//    private final CommentRepository commentRepository;
+//    private final BookRepository bookRepository;
+//
+//    @Override
+//    public List<Comment> getBookComments(String bookId) {
+//        return commentRepository.findByBookId(bookId);
+//    }
+//
+//    @Transactional
+//    @Override
+//    public Comment addComment(String bookId, Comment comment) {
+//        Book book = bookRepository.findById(bookId)
+//                .orElseThrow(() -> new NotFoundException("Book with id " + bookId + " not found!"));
+//        comment.setBook(book);
+//        return commentRepository.save(comment);
+//    }
+//
+//    @Transactional
+//    @Override
+//    public Comment updateComment(Comment comment) {
+//        Comment databaseComment = commentRepository.findById(comment.getId())
+//                .orElseThrow(() -> new NotFoundException("Comment with id " + comment.getId() + " not found!"));
+//        databaseComment.setText(comment.getText());
+//        return commentRepository.save(databaseComment);
+//    }
+//
+//    @Transactional
+//    @Override
+//    public void deleteComment(String commentId) {
+//        commentRepository.deleteById(commentId);
+//    }
 }

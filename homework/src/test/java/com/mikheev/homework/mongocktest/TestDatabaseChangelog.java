@@ -11,6 +11,7 @@ import com.mikheev.homework.repositories.BookRepository;
 import com.mikheev.homework.repositories.CommentRepository;
 import com.mikheev.homework.repositories.GenreRepository;
 import com.mongodb.client.MongoDatabase;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,27 +27,26 @@ public class TestDatabaseChangelog {
     }
 
     @ChangeSet(order = "002", id = "insertData", author = "AlexanderMikheev", runAlways = true)
-    public void insertData(GenreRepository genreRepository, AuthorRepository authorRepository,
-                           BookRepository bookRepository, CommentRepository commentRepository) {
+    public void insertData(MongoTemplate mongoTemplate) {
 
         Genre detectiveGenre = new Genre("0", "detective");
         Genre comedyGenre = new Genre("1", "comedy");
         Genre criminalGenre = new Genre("2", "criminal");
-        genreRepository.saveAll(Arrays.asList(detectiveGenre, comedyGenre, criminalGenre));
+        mongoTemplate.insertAll(Arrays.asList(detectiveGenre, comedyGenre, criminalGenre));
 
         Author author0 = new Author("0", "AuthorOfDetectiveAndComedy");
-        authorRepository.saveAll(Collections.singletonList(author0));
+        mongoTemplate.insertAll(Collections.singletonList(author0));
 
         Book book0 = new Book("0", "comedyBook", author0, comedyGenre);
         Book book1 = new Book("1", "detectiveBook", author0, detectiveGenre);
         Book book2 = new Book("2", "criminalBook", author0, criminalGenre);
-        bookRepository.saveAll(Arrays.asList(book0, book1, book2));
+        mongoTemplate.insertAll(Arrays.asList(book0, book1, book2));
 
         List<Comment> comments = new ArrayList<>();
         comments.add(new Comment("1", "test positive comment", book0));
         comments.add(new Comment("2", "test negative comment", book1));
         comments.add(new Comment("3", "test neutral comment", book2));
         comments.add(new Comment("4", "test positive comment", book0));
-        commentRepository.saveAll(comments);
+        mongoTemplate.insertAll(comments);
     }
 }
