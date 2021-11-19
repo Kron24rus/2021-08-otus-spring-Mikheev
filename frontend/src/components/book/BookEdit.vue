@@ -62,21 +62,19 @@
         },
         methods: {
             loadLibraryEntities: function () {
-                let that = this;
                 apiService.getEditLibraryEntities()
-                    .then(function (response) {
-                        that.libraryEntities = response.data;
-                    })
+                    .then(response => {
+                        this.libraryEntities = response.data;
+                    });
             },
             saveBook: function () {
-                let that = this;
                 let bookToSave = Object.assign({}, this.bookModel);
                 bookToSave.title = this.bookTitle;
                 bookToSave.author = this.selectedAuthor;
                 bookToSave.genre = this.selectedGenre;
                 apiService.saveUpdatedBook(bookToSave)
-                    .then(function (response) {
-                        that.$emit('bookSaved', response.data);
+                    .then(response => {
+                        this.$emit('bookSaved', response.data);
                     });
             }
         }

@@ -5,12 +5,12 @@
             <div>
                 <label for="holder-input">Title:</label>
                 <input id="holder-input" name="title" type="text"
-                       v-model="bookTitle"/>
+                       v-model="title"/>
             </div>
             <div>
                 <label for="authorSelect">Choose author:</label>
                 <select id="authorSelect" class="form-control"
-                        v-model="selectedAuthor">
+                        v-model="author">
                     <option v-for="author in libraryEntities.authors"
                             :value="author">{{ author.name }}
                     </option>
@@ -19,7 +19,7 @@
             <div>
                 <label for="genreSelect">Choose genre:</label>
                 <select id="genreSelect" class="form-control"
-                        v-model="selectedGenre">
+                        v-model="genre">
                     <option v-for="genre in libraryEntities.genres"
                             :value="genre">{{ genre.name }}
                     </option>
@@ -40,9 +40,9 @@
         data: function () {
             return {
                 libraryEntities: {},
-                bookTitle: '',
-                selectedAuthor: {},
-                selectedGenre: {}
+                title: '',
+                author: {},
+                genre: {}
             }
         },
         mounted: function () {
@@ -50,24 +50,17 @@
         },
         methods: {
             loadLibraryEntities: function () {
-                let that = this;
                 apiService.getEditLibraryEntities()
-                    .then(function (response) {
-                        console.log(response.data);
-                        that.libraryEntities = response.data;
-                    })
+                    .then(response => {
+                        this.libraryEntities = response.data;
+                    });
             },
             addBook: function () {
-                let that = this;
-                let bookToAdd = {
-                    title: this.bookTitle,
-                    author: this.selectedAuthor,
-                    genre: this.selectedGenre
-                };
-                apiService.addBook(bookToAdd)
-                    .then(function (response) {
-                        that.$emit('bookAdded', response.data);
-                    })
+                let {title, author, genre} = this;
+                apiService.addBook({title, author, genre})
+                    .then(response => {
+                        this.$emit('bookAdded', response.data);
+                    });
             }
         }
     }

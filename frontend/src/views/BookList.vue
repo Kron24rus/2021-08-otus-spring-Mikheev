@@ -49,7 +49,7 @@
         data: function () {
             return {
                 isCreateMode: false,
-                books: {},
+                books: [],
                 book: {}
             }
         },
@@ -60,13 +60,12 @@
 
         methods: {
             getBookList: function () {
-                let that = this;
                 apiService.getBookList()
-                    .then(function (response) {
-                        that.books = response.data;
-                    }).catch(function (error) {
+                    .then(response => {
+                        this.books = response.data;
+                    }).catch(error => {
                     //todo: add error message
-                })
+                });
             },
 
             createBook: function () {
@@ -79,12 +78,10 @@
             },
 
             deleteBook: function (bookId) {
-                let that = this;
                 apiService.deleteBook(bookId)
-                    .then(function () {
-                        that.getBookList();
-                        that.isBookView = false;
-                    })
+                    .then(() => {
+                        this.getBookList();
+                    });
             }
         }
     }
