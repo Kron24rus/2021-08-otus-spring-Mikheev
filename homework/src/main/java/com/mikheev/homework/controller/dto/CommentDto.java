@@ -5,14 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssociationsDto {
+public class CommentDto {
 
-    List<AuthorDto> authors;
-    List<GenreDto> genres;
+    String id;
+    String text;
+    String bookId;
 }

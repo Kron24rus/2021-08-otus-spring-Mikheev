@@ -1,19 +1,13 @@
 package com.mikheev.homework.controller;
 
-import com.mikheev.homework.controller.dto.AssociationsDto;
-import com.mikheev.homework.controller.dto.BookDto;
-import com.mikheev.homework.domain.Author;
-import com.mikheev.homework.domain.Book;
-import com.mikheev.homework.domain.Comment;
-import com.mikheev.homework.domain.Genre;
+import com.mikheev.homework.controller.dto.*;
 import com.mikheev.homework.repositories.AuthorRepository;
 import com.mikheev.homework.repositories.BookRepository;
 import com.mikheev.homework.repositories.CommentRepository;
-import com.mikheev.homework.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.modelmapper.ModelMapper;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -23,49 +17,55 @@ import java.util.List;
 public class BookController {
 
    private final AuthorRepository authorRepository;
-   private final GenreRepository genreRepository;
-   private final BookRepository bookRepository;
+    private final BookRepository bookRepository;
    private final CommentRepository commentRepository;
+   private final ModelMapper modelMapper;
 
-    @GetMapping("/book")
-    public Flux<Book> bookList() {
-        return bookRepository.findAll();
-    }
-
-    @GetMapping("/book/{id}")
-    public Mono<BookDto> getBook(@PathVariable("id") String id) {
-        Mono<Book> bookMono = bookRepository.findById(id);
-        Mono<List<Comment>> commentsMono = commentRepository.findByBookId(id).collectList();
-        return Mono.zip(bookMono, commentsMono, this::toBookDto);
-    }
-
-    @GetMapping("/book/associations")
-    public Mono<AssociationsDto> loadEditCreateAssociations() {
-        Mono<List<Author>> authors = authorRepository.findAll().collectList();
-        Mono<List<Genre>> genres = genreRepository.findAll().collectList();
-        return Mono.zip(authors, genres, this::toAssociationsDto);
-    }
-
-    @PostMapping("/book")
-    public Mono<Book> addBook(@RequestBody Book book) {
-        return bookRepository.insert(book);
-    }
-
-    @PutMapping("/book")
-    public Mono<Book> updateBook(@RequestBody Book book) {
-        return bookRepository.save(book);
-    }
-
-    @DeleteMapping("/book/{id}")
-    public void deleteBook(@PathVariable("id") String id) {
-        bookRepository.deleteByIdCascadeComments(id);
-    }
-
-    private BookDto toBookDto(Book book, List<Comment> comments) {
-        return new BookDto(book, comments);
-    }
-
-    private AssociationsDto toAssociationsDto(List<Author> authors, List<Genre> genres) {
-        return new AssociationsDto(authors, genres);
-    }
+//    @GetMapping("/book")
+//    public Flux<BookDto> bookList() {
+//        return bookRepository.findAll().map(book -> modelMapper.map(book, BookDto.class));
+//    }
+//
+//    @GetMapping("/book/{id}")
+//    public Mono<BookDto> getBook(@PathVariable("id") String id) {
+//        Mono<BookDto> bookMono = bookRepository.findById(id).map(book -> modelMapper.map(book, BookDto.class));
+//        Mono<List<CommentDto>> commentsMono = commentRepository.findByBookId(id)
+//                .map(comment -> modelMapper.map(comment, CommentDto.class)).collectList();
+//        return Mono.zip(bookMono, commentsMono, this::appendComments);
+//    }
+//
+//    @GetMapping("/associations")
+//    public Mono<AssociationsDto> loadEditCreateAssociations() {
+//        Mono<List<AuthorDto>> authors = authorRepository.findAll()
+//                .map(author -> modelMapper.map(author, AuthorDto.class)).collectList();
+//        Mono<List<GenreDto>> genres = genreRepository.findAll()
+//                .map(genre -> modelMapper.map(genre, GenreDto.class)).collectList();
+//        return Mono.zip(authors, genres, this::toAssociationsDto);
+//    }
+//
+//    @PostMapping("/book")
+//    public Mono<BookDto> addBook(@RequestBody BookDto bookDto) {
+//        return bookRepository.insert(modelMapper.map(bookDto, Book.class))
+//                .map(book -> modelMapper.map(book, BookDto.class));
+//    }
+//
+//    @PutMapping("/book")
+//    public Mono<BookDto> updateBook(@RequestBody BookDto bookDto) {
+//        return bookRepository.save(modelMapper.map(bookDto, Book.class))
+//                .map(book -> modelMapper.map(book, BookDto.class));
+//    }
+//
+//    @DeleteMapping("/book/{id}")
+//    public void deleteBook(@PathVariable("id") String id) {
+//        bookRepository.deleteByIdCascadeComments(id);
+//    }
+//
+//    private BookDto appendComments(BookDto book, List<CommentDto> comments) {
+//        book.setComments(comments);
+//        return book;
+//    }
+//
+//    private AssociationsDto toAssociationsDto(List<AuthorDto> authors, List<GenreDto> genres) {
+//        return new AssociationsDto(authors, genres);
+//    }
 }

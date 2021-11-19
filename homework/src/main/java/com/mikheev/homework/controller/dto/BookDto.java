@@ -1,18 +1,19 @@
 package com.mikheev.homework.controller.dto;
 
-import com.mikheev.homework.domain.Book;
-import com.mikheev.homework.domain.Comment;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
+@ToString
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class BookDto {
 
-    Book book;
-    List<Comment> comments;
+    private String id;
+    private String title;
+    private AuthorDto author;
+    private GenreDto genre;
+    private List<CommentDto> comments;
 }

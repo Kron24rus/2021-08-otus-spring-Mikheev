@@ -1,9 +1,11 @@
 package com.mikheev.homework.controller;
 
+import com.mikheev.homework.controller.dto.CommentDto;
 import com.mikheev.homework.domain.Comment;
 import com.mikheev.homework.repositories.BookRepository;
 import com.mikheev.homework.repositories.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -14,20 +16,23 @@ public class CommentController {
 
     private final CommentRepository commentRepository;
     private final BookRepository bookRepository;
+    private final ModelMapper modelMapper;
 
-    @PostMapping("/book/{id}/comment")
-    public Mono<Comment> addComment(@PathVariable("id") String bookId, @RequestBody Comment comment) {
-        return bookRepository.findById(bookId).flatMap(book -> {
+    @PostMapping("/comment")
+    public Mono<CommentDto> addComment(@RequestBody CommentDto commentDto) {
+        return bookRepository.findById(commentDto.getBookId()).flatMap(book -> {
+            Comment comment = modelMapper.map(commentDto, Comment.class);
             comment.setBook(book);
-            return commentRepository.insert(comment);
+            return commentRepository.insert(comment)
+                    .map(insertedComment -> modelMapper.map(insertedComment, CommentDto.class));
         });
     }
 
     @PutMapping("/comment")
-    public Mono<Comment> updateComment(@RequestBody Comment comment) {
-        return commentRepository.findById(comment.getId()).flatMap(databaseComment -> {
-            databaseComment.setText(comment.getText());
-            return commentRepository.save(databaseComment);
+    public Mono<CommentDto> updateComment(@RequestBody CommentDto commentDto) {
+        return commentRepository.findById(commentDto.getId()).flatMap(databaseComment -> {
+            databaseComment.setText(commentDto.getText());
+            return commentRepository.save(databaseComment).map(comment -> modelMapper.map(comment, CommentDto.class));
         });
     }
 
