@@ -7,12 +7,7 @@ import com.mikheev.homework.domain.Author;
 import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Comment;
 import com.mikheev.homework.domain.Genre;
-import com.mikheev.homework.repositories.AuthorRepository;
-import com.mikheev.homework.repositories.BookRepository;
-import com.mikheev.homework.repositories.CommentRepository;
-import com.mikheev.homework.repositories.GenreRepository;
 import com.mongodb.client.MongoDatabase;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;

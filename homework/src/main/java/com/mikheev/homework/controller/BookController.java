@@ -1,6 +1,5 @@
 package com.mikheev.homework.controller;
 
-import com.mikheev.homework.controller.dto.*;
 import com.mikheev.homework.repositories.AuthorRepository;
 import com.mikheev.homework.repositories.BookRepository;
 import com.mikheev.homework.repositories.CommentRepository;
@@ -8,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
