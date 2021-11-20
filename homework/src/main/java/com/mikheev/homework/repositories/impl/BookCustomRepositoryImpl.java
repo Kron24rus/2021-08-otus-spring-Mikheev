@@ -17,17 +17,12 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
     private final ReactiveMongoTemplate mongoTemplate;
 
     @Override
-    public Mono<Book> findByIdWithComments(String id) {
-        return mongoTemplate.findById(id, Book.class);
-    }
-
-    @Override
-    public void deleteByIdCascadeComments(String id) {
+    public Mono<Void> deleteByIdCascadeComments(String id) {
         Query query = new Query();
         query.addCriteria(Criteria.where("book.$id").is(id));
-        mongoTemplate.findAllAndRemove(query, Comment.class).subscribe();
         Query bookQuery = new Query();
         bookQuery.addCriteria(Criteria.where("_id").is(id));
-        mongoTemplate.remove(bookQuery, Book.class).subscribe();
+        return mongoTemplate.findAllAndRemove(query, Comment.class)
+                .then(mongoTemplate.remove(bookQuery, Book.class)).then();
     }
 }

@@ -110,8 +110,7 @@ public class LibraryConfiguration {
 
         Mono<ServerResponse> deleteBook(ServerRequest request) {
             String bookId = request.pathVariable("id");
-            bookRepository.deleteByIdCascadeComments(bookId);
-            return ok().build();
+            return bookRepository.deleteByIdCascadeComments(bookId).then(ok().build());
         }
 
         private BookDto appendComments(BookDto book, List<CommentDto> comments) {
