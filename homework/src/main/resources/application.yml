@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      database: library
+      host: localhost
+      port: 27017
+
+server:
+  port: 8098
+
+mongock:
+  runner-type: InitializingBean
+  change-logs-scan-package: com.mikheev.homework.mongock.changelog
