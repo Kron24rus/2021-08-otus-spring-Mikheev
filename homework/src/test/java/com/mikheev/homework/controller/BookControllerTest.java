@@ -8,6 +8,7 @@ import com.mikheev.homework.service.BookService;
 import com.mikheev.homework.service.CommentService;
 import com.mikheev.homework.service.GenreService;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,6 +40,8 @@ public class BookControllerTest {
     private GenreService genreService;
     @MockBean
     private CommentService commentService;
+    @MockBean
+    private ModelMapper modelMapper;
 
     @Test
     void get_all_books_should_return_OK() throws Exception {

@@ -35,13 +35,12 @@
 
         methods: {
             getGenreList: function () {
-                let that = this;
                 apiService.getGenreList()
-                    .then(function (response) {
-                        that.genres = response.data;
-                    }).catch(function (error) {
+                    .then(response => {
+                        this.genres = response.data;
+                    }).catch(error => {
                     //todo: add error message
-                })
+                });
             }
         }
     }

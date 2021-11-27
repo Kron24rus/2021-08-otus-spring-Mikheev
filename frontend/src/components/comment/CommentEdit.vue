@@ -39,12 +39,11 @@
         },
         methods: {
             saveComment: function () {
-                let that = this;
                 let commentToSave = Object.assign({}, this.commentModel);
                 commentToSave.text = this.commentText;
                 apiService.saveUpdatedComment(commentToSave)
-                    .then(function (response) {
-                        that.$emit('commentSaved', response.data);
+                    .then(response => {
+                        this.$emit('commentSaved', response.data);
                     });
             }
         }

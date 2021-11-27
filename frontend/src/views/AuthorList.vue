@@ -35,13 +35,12 @@
 
         methods: {
             getAuthorList: function () {
-                let that = this;
                 apiService.getAuthorList()
-                    .then(function (response) {
-                        that.authors = response.data;
-                    }).catch(function (error) {
+                    .then(response => {
+                        this.authors = response.data;
+                    }).catch(error => {
                     //todo: add error message
-                })
+                });
             }
         }
     }

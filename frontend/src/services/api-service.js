@@ -11,10 +11,10 @@ export default {
         return apiClient.get('/book');
     },
     getBook(bookId) {
-        return apiClient.get('/book/' + bookId);
+        return apiClient.get(`/book/${bookId}`);
     },
     deleteBook(bookId) {
-        return apiClient.delete('/book/' + bookId);
+        return apiClient.delete(`/book/${bookId}`);
     },
     getAuthorList() {
         return apiClient.get('/author');
@@ -23,7 +23,7 @@ export default {
         return apiClient.get('/genre');
     },
     getEditLibraryEntities() {
-        return apiClient.get('/book/associations');
+        return apiClient.get('/associations');
     },
     saveUpdatedBook(data) {
         return apiClient.put('/book', data);
@@ -31,13 +31,13 @@ export default {
     addBook(data) {
         return apiClient.post('/book', data);
     },
-    addComment(bookId, data) {
-        return apiClient.post('/book/' + bookId + '/comment', data);
+    addComment(data) {
+        return apiClient.post('/comment', data);
     },
     saveUpdatedComment(data) {
         return apiClient.put('/comment', data);
     },
     deleteComment(commentId) {
-        return apiClient.delete('/comment/' + commentId);
+        return apiClient.delete(`/comment/${commentId}`);
     }
 }

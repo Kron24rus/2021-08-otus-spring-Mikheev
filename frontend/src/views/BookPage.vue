@@ -1,13 +1,13 @@
 <template>
-    <book-edit v-if="isEditBook"
+    <book-edit v-if="editBookMode"
                :book-model="book"
                @bookSaved="updateSavedBook">
     </book-edit>
-    <comment-edit v-if="isEditComment"
+    <comment-edit v-if="editCommentMode"
                   :comment-model="editedComment"
                   @commentSaved="updateComment">
     </comment-edit>
-    <comment-add v-if="isAddComment"
+    <comment-add v-if="addCommentMode"
                  :book-id="id"
                  @commentAdded="updateCommentList">
     </comment-add>
@@ -90,17 +90,17 @@
             return {
                 book: {},
                 selectedGenre: {},
-                isEditBook: false,
-                isEditComment: false,
-                isAddComment: false,
-                isLoading: false,
+                editBookMode: false,
+                editCommentMode: false,
+                addCommentMode: false,
+                loading: false,
                 editedComment: {}
             }
         },
 
         computed: {
             bookPageActive: function () {
-                return !(this.isEditBook || this.isEditComment || this.isAddComment || this.isLoading);
+                return !(this.editBookMode || this.editCommentMode || this.addCommentMode || this.loading);
             }
         },
 
@@ -110,37 +110,36 @@
 
         methods: {
             getBook: function (bookId) {
-                this.isLoading = true;
-                let that = this;
+                this.loading = true;
                 apiService.getBook(bookId)
-                    .then(function (response) {
-                        that.book = response.data;
-                        that.isLoading = false;
+                    .then(response => {
+                        this.book = response.data;
+                        this.loading = false;
                     })
             },
 
             enableEditMode: function () {
-                this.isEditBook = true;
+                this.editBookMode = true;
             },
 
             updateSavedBook: function (savedBook) {
                 this.book.title = savedBook.title;
                 this.book.author = savedBook.author;
                 this.book.genre = savedBook.genre;
-                this.isEditBook = false;
+                this.editBookMode = false;
             },
 
             createComment: function () {
-                this.isAddComment = true;
+                this.addCommentMode = true;
             },
 
             updateCommentList: function (addedComment) {
                 this.book.comments.push(addedComment);
-                this.isAddComment = false;
+                this.addCommentMode = false;
             },
 
             editComment: function (comment) {
-                this.isEditComment = true;
+                this.editCommentMode = true;
                 this.editedComment = comment;
             },
 
@@ -151,14 +150,13 @@
                         comments[key].text = savedComment.text;
                     }
                 });
-                this.isEditComment = false;
+                this.editCommentMode = false;
             },
 
             deleteComment: function (commentId) {
-                let that = this;
                 apiService.deleteComment(commentId)
-                    .then(function () {
-                        that.updateModelAfterDelete(commentId);
+                    .then(() => {
+                        this.updateModelAfterDelete(commentId);
                     })
             },
 
