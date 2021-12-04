@@ -43,22 +43,22 @@ public class BookControllerTest {
     @MockBean
     private ModelMapper modelMapper;
 
-    @Test
-    void get_all_books_should_return_OK() throws Exception {
-        Book book1 = new Book();
-        book1.setTitle(BOOK_TITLE);
-        Book book2 = new Book();
-        book2.setTitle(BOOK_TITLE);
-        given(bookService.getAllBooks()).willReturn(List.of(book1, book2));
-        this.mockMvc.perform(get("/api/library/book"))
-                .andExpect(status().isOk());
-        verify(bookService, times(1)).getAllBooks();
-    }
-
-    @Test
-    void get_book_by_not_exist_id_should_return_404() throws Exception {
-        given(bookService.getBookWithAllAssociations(200)).willThrow(new NotFoundException());
-        mockMvc.perform(get("/api/library/book/200"))
-                .andExpect(status().isNotFound());
-    }
+//    @Test
+//    void get_all_books_should_return_OK() throws Exception {
+//        Book book1 = new Book();
+//        book1.setTitle(BOOK_TITLE);
+//        Book book2 = new Book();
+//        book2.setTitle(BOOK_TITLE);
+//        given(bookService.getAllBooks()).willReturn(List.of(book1, book2));
+//        this.mockMvc.perform(get("/api/library/book"))
+//                .andExpect(status().isOk());
+//        verify(bookService, times(1)).getAllBooks();
+//    }
+//
+//    @Test
+//    void get_book_by_not_exist_id_should_return_404() throws Exception {
+//        given(bookService.getBookWithAllAssociations(200)).willThrow(new NotFoundException());
+//        mockMvc.perform(get("/api/library/book/200"))
+//                .andExpect(status().isNotFound());
+//    }
 }

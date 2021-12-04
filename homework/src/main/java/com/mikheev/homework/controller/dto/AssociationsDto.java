@@ -13,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class AssociationsDto {
 
-    List<AuthorDto> authors;
-    List<GenreDto> genres;
+    private List<AuthorDto> authors;
+    private List<GenreDto> genres;
 }

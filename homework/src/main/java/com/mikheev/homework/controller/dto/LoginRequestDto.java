@@ -7,8 +7,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GenreDto {
+public class LoginRequestDto {
 
-    private Long id;
-    private String name;
+    private String username;
+    private String password;
 }

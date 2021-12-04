@@ -45,3 +45,7 @@ insert into comments (id, text, book_id) values (26, 'negative comment', 4);
 insert into comments (id, text, book_id) values (27, 'neutral comment', 5);
 insert into comments (id, text, book_id) values (28, 'positive comment', 6);
 insert into comments (id, text, book_id) values (29, 'negative comment', 7);
+
+insert into users (username, password, enabled) values ('admin', 'admin', true);
+insert into users (username, password, enabled) values ('user', 'user', true);
+insert into users (username, password, enabled) values ('moderator', 'moderator', true);

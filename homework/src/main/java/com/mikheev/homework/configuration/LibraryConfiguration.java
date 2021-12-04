@@ -44,7 +44,7 @@ public class LibraryConfiguration {
     private OncePerRequestFilter createRedirectFilter() {
         return new OncePerRequestFilter() {
             // Forwards all routes except '/index.html', '/api/library/', '/api/library/**' (caused by history API on frontend)
-            private final String REGEX = "(?!/api/library|/static|/index\\.html|/favicon\\.ico).*$";
+            private final String REGEX = "(?!/api/library|/api/auth|/static|/index\\.html|/favicon\\.ico).*$";
             private Pattern pattern = Pattern.compile(REGEX);
             @Override
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
