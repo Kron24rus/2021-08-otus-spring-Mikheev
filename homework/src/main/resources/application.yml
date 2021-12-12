@@ -1,0 +1,25 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+  sql:
+    init:
+      data-locations: classpath:data.sql
+      schema-locations: classpath:schema.sql
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+server:
+  port: 8098
+
+jwt:
+  secret: FfbEDyJ0s5qEqyMQyJ0u
+  issuer: libraryJwt
+  expiration-time: 86400
+  refresh-expiration-time: 172800
