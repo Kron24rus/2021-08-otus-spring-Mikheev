@@ -46,6 +46,6 @@ insert into comments (id, text, book_id) values (27, 'neutral comment', 5);
 insert into comments (id, text, book_id) values (28, 'positive comment', 6);
 insert into comments (id, text, book_id) values (29, 'negative comment', 7);
 
-insert into users (username, password, enabled) values ('admin', 'admin', true);
-insert into users (username, password, enabled) values ('user', 'user', true);
-insert into users (username, password, enabled) values ('moderator', 'moderator', true);
+insert into users (username, password, enabled) values ('admin', '$2a$12$KqgkGVzJ3Fbn9tZZGfeoRuRyg6od983W1TYDYUkdmznK356Sf.ONu', true);
+insert into users (username, password, enabled) values ('user', '$2a$12$y48Osj.DWsdf21obKpiYHOFuX9DaV0VpXbJanu8.JeNZ9vt54V3hO', true);
+insert into users (username, password, enabled) values ('moderator', '$2a$12$lHsk7GDy5mMbqz0FpWVsCOZCMCS7lZpsbGi/tJ5XvKe0ZOFoqdvRi', true);
