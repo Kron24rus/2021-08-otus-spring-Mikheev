@@ -4,8 +4,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -17,11 +15,9 @@ public class JwtTokenUtil {
 
     private final JwtConfiguration jwtConfiguration;
 
-    public String generateJwtToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
+    public String generateJwtToken(String username) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(username)
                 .setIssuer(jwtConfiguration.getIssuer())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtConfiguration.getExpirationTime()))

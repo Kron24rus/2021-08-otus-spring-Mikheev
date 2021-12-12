@@ -22,3 +22,4 @@ jwt:
   secret: FfbEDyJ0s5qEqyMQyJ0u
   issuer: libraryJwt
   expiration-time: 86400
+  refresh-expiration-time: 172800

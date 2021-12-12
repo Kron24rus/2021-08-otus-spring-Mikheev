@@ -1,43 +1,49 @@
-import axios from 'axios'
-import authHeader from './auth-header'
+import apiClient from './api-client'
+import EventBus from './event-bus'
 
-const apiClient = axios.create({
-    baseURL: '/api/library',
-    withCredentials: false
-});
+function handleError(error) {
+
+    console.log(error.toString());
+
+    if (error.response && error.response.status === 403) {
+        EventBus.dispatch('logout');
+    }
+
+    return error;
+}
 
 export default {
     getBookList() {
-        return apiClient.get('/book', { headers: authHeader() });
+        return apiClient.get('/library/book').catch(error => handleError(error));
     },
     getBook(bookId) {
-        return apiClient.get(`/book/${bookId}`, { headers: authHeader() });
+        return apiClient.get(`/library/book/${bookId}`).catch(error => handleError(error));
     },
     deleteBook(bookId) {
-        return apiClient.delete(`/book/${bookId}`, { headers: authHeader() });
+        return apiClient.delete(`/library/book/${bookId}`).catch(error => handleError(error));
     },
     getAuthorList() {
-        return apiClient.get('/author', { headers: authHeader() });
+        return apiClient.get('/library/author').catch(error => handleError(error));
     },
     getGenreList() {
-        return apiClient.get('/genre', { headers: authHeader() });
+        return apiClient.get('/library/genre').catch(error => handleError(error));
     },
     getEditLibraryEntities() {
-        return apiClient.get('/associations', { headers: authHeader() });
+        return apiClient.get('/library/associations').catch(error => handleError(error));
     },
     saveUpdatedBook(data) {
-        return apiClient.put('/book', data, { headers: authHeader() });
+        return apiClient.put('/library/book', data).catch(error => handleError(error));
     },
     addBook(data) {
-        return apiClient.post('/book', data, { headers: authHeader() });
+        return apiClient.post('/library/book', data).catch(error => handleError(error));
     },
     addComment(data) {
-        return apiClient.post('/comment', data, { headers: authHeader() });
+        return apiClient.post('/library/comment', data).catch(error => handleError(error));
     },
     saveUpdatedComment(data) {
-        return apiClient.put('/comment', data, { headers: authHeader() });
+        return apiClient.put('/library/comment', data).catch(error => handleError(error));
     },
     deleteComment(commentId) {
-        return apiClient.delete(`/comment/${commentId}`, { headers: authHeader() });
+        return apiClient.delete(`/library/comment/${commentId}`).catch(error => handleError(error));
     }
 }

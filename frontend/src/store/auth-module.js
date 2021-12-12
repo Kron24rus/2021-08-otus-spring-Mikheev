@@ -20,6 +20,13 @@ export const auth = {
                     return Promise.reject(error);
                 }
             );
+        },
+        logout({ commit }, user) {
+            AuthService.logout();
+            commit('logout');
+        },
+        refreshToken({ commit }, accessToken) {
+            commit('refreshToken', accessToken)
         }
     },
     mutations: {
@@ -30,6 +37,14 @@ export const auth = {
         loginFailure(state) {
             state.status.loggedIn = false;
             state.user = null;
+        },
+        logout(state) {
+            state.status.loggedIn = false;
+            state.user = null;
+        },
+        refreshToken(state, accessToken) {
+            state.status.loggedIn = true;
+            state.user = { ...state.user, accessToken: accessToken };
         }
     }
 };

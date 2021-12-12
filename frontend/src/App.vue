@@ -10,6 +10,9 @@
             |
             <router-link to="/genre">List of all genres</router-link>
         </template>
+        <template v-if="currentUser">|
+            <a v-if="currentUser" @click="logOut" href="#">LogOut</a>
+        </template>
     </div>
     <div class="container">
         <div class="row">
@@ -19,11 +22,27 @@
 </template>
 
 <script>
+    import EventBus from './services/event-bus';
+
     export default {
         computed: {
             currentUser() {
                 return this.$store.state.auth.user;
             }
+        },
+        methods: {
+            logOut() {
+                this.$store.dispatch('auth/logout');
+                this.$router.push('/login');
+            }
+        },
+        mounted() {
+            EventBus.on('logout', () => {
+                this.logOut();
+            })
+        },
+        beforeDestroy() {
+            EventBus.remove('logout');
         }
     };
 </script>
