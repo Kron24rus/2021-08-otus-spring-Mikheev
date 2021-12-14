@@ -10,6 +10,7 @@ import com.mikheev.homework.service.BookService;
 import com.mikheev.homework.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public class BookController {
         return modelMapper.map(bookService.getBookWithAllAssociations(id), BookDto.class);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @GetMapping("/associations")
     public Map<String, Object> loadEditCreateAssociations() {
         Map<String, Object> responseMap = new HashMap<>();
@@ -49,16 +51,19 @@ public class BookController {
         return responseMap;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PostMapping("/book")
     public Book addBook(@RequestBody Book book) {
         return bookService.addBook(book);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PutMapping("/book")
     public Book updateBook(@RequestBody Book book) {
         return bookService.updateBook(book);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @DeleteMapping("/book/{id}")
     public void deleteBook(@PathVariable("id") long id) {
         bookService.deleteBook(id);

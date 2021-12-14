@@ -20,7 +20,7 @@
                 <th>Title</th>
                 <th>Author</th>
                 <th>Genre</th>
-                <th>Edit</th>
+                <th v-if="isAdmin || isModerator">Edit</th>
             </tr>
             </thead>
             <tbody>
@@ -29,7 +29,7 @@
                 <td>{{ book.title }}</td>
                 <td>{{ book.author.name }}</td>
                 <td>{{ book.genre.name }}</td>
-                <td>
+                <td v-if="isModerator || isAdmin">
                     <a href="#" @click="enableEditMode()">Edit</a>
                 </td>
             </tr>
@@ -40,19 +40,19 @@
             <tr>
                 <th>ID</th>
                 <th>Text</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th v-if="isModerator">Edit</th>
+                <th v-if="isModerator">Delete</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(comment, index) in book.comments" v-bind:key="index">
                 <td>{{ comment.id }}</td>
                 <td>{{ comment.text }}</td>
-                <td>
+                <td v-if="isModerator">
                     <a href="#"
                        @click="editComment(comment)">Edit</a>
                 </td>
-                <td>
+                <td v-if="isModerator">
                     <button class="btn btn-primary"
                             v-on:click="deleteComment(comment.id)">Delete
                     </button>
@@ -101,6 +101,19 @@
         computed: {
             bookPageActive: function () {
                 return !(this.editBookMode || this.editCommentMode || this.addCommentMode || this.loading);
+            },
+            currentUser() {
+                return this.$store.state.auth.user;
+            },
+            isAdmin() {
+                if (this.currentUser && this.currentUser['roles']) {
+                    return this.currentUser['roles'].includes('ROLE_ADMIN');
+                }
+            },
+            isModerator() {
+                if (this.currentUser && this.currentUser['roles']) {
+                    return this.currentUser['roles'].includes('ROLE_MODERATOR');
+                }
             }
         },
 

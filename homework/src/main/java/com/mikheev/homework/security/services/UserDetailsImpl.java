@@ -1,9 +1,13 @@
 package com.mikheev.homework.security.services;
 
+import com.mikheev.homework.domain.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class UserDetailsImpl implements UserDetails {
@@ -12,15 +16,20 @@ public class UserDetailsImpl implements UserDetails {
 
     private String password;
 
+    private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String username, String password) {
+
+    public UserDetailsImpl(String username, String password, Set<Role> roles) {
         this.username = username;
         this.password = password;
+        this.authorities = roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override

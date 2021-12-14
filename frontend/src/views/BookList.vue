@@ -9,7 +9,7 @@
                 <th>ID</th>
                 <th>Title</th>
                 <th>Book page</th>
-                <th>Delete</th>
+                <th v-if="isAdmin || isModerator">Delete</th>
             </tr>
             </thead>
             <tbody>
@@ -19,13 +19,13 @@
                 <td>
                     <router-link :to="{ name: 'Book page', params: { id: book.id }}">Info</router-link>
                 </td>
-                <td>
+                <td v-if="isAdmin || isModerator">
                     <button class="btn btn-primary"
                             v-on:click="deleteBook(book.id)">Delete
                     </button>
                 </td>
             </tr>
-            <tr>
+            <tr v-if="isAdmin || isModerator">
                 <td colspan="4">
                     <a href="#" @click="createBook()">Add Book</a>
                 </td>
@@ -51,6 +51,22 @@
                 isCreateMode: false,
                 books: [],
                 book: {}
+            }
+        },
+
+        computed: {
+            currentUser() {
+                return this.$store.state.auth.user;
+            },
+            isAdmin() {
+                if (this.currentUser && this.currentUser['roles']) {
+                    return this.currentUser['roles'].includes('ROLE_ADMIN');
+                }
+            },
+            isModerator() {
+                if (this.currentUser && this.currentUser['roles']) {
+                    return this.currentUser['roles'].includes('ROLE_MODERATOR');
+                }
             }
         },
 
