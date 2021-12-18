@@ -15,47 +15,47 @@
     <artifactId>homework</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>Homework 9</name>
-    <description>Spring MVC Homework</description>
+    <name>Homework</name>
+    <description>Spring Batch Homework</description>
 
     <properties>
         <java.version>11</java.version>
-        <bootstrap.version>5.1.3</bootstrap.version>
         <modelmapper.version>2.4.4</modelmapper.version>
-        <jjwt.version>0.9.1</jjwt.version>
-        <jackson.hibernate5.version>2.13.0</jackson.hibernate5.version>
+<!--        <spring.shell.version>2.0.1.RELEASE</spring.shell.version>-->
+        <mongock.version>4.3.8</mongock.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-batch</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>${jjwt.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
-        <!-- Required to serialization of lazy associations -->
         <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate5</artifactId>
-            <version>${jackson.hibernate5.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.shell</groupId>
+            <artifactId>spring-shell-starter</artifactId>
+            <version>${spring.shell.version}</version>
+        </dependency>
+
+        <!-- migration tools -->
+        <dependency>
+            <groupId>com.github.cloudyrock.mongock</groupId>
+            <artifactId>mongock-spring-v5</artifactId>
+            <version>${mongock.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.cloudyrock.mongock</groupId>
+            <artifactId>mongodb-springdata-v3-driver</artifactId>
+            <version>${mongock.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -71,11 +71,6 @@
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>${bootstrap.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -83,8 +78,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -102,32 +102,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy Vue.js frontend content</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>src/main/resources/public</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>../frontend/target/dist</directory>
-                                    <includes>
-                                        <include>static/</include>
-                                        <include>index.html</include>
-                                        <include>favicon.ico</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,4 +1,19 @@
 spring:
+  main:
+    allow-circular-references: true
+
+  batch:
+    job:
+      enabled: false
+  shell:
+    interactive:
+      enabled: true
+
+  data:
+    mongodb:
+      database: library
+      host: localhost
+      port: 27017
   h2:
     console:
       enabled: true
@@ -17,9 +32,3 @@ spring:
     show-sql: true
 server:
   port: 8098
-
-jwt:
-  secret: FfbEDyJ0s5qEqyMQyJ0u
-  issuer: libraryJwt
-  expiration-time: 86400
-  refresh-expiration-time: 172800

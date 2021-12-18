@@ -45,15 +45,3 @@ insert into comments (id, text, book_id) values (26, 'negative comment', 4);
 insert into comments (id, text, book_id) values (27, 'neutral comment', 5);
 insert into comments (id, text, book_id) values (28, 'positive comment', 6);
 insert into comments (id, text, book_id) values (29, 'negative comment', 7);
-
-insert into users (id, username, password, enabled) values (1, 'admin', '$2a$12$KqgkGVzJ3Fbn9tZZGfeoRuRyg6od983W1TYDYUkdmznK356Sf.ONu', true);
-insert into users (id, username, password, enabled) values (2, 'user', '$2a$12$y48Osj.DWsdf21obKpiYHOFuX9DaV0VpXbJanu8.JeNZ9vt54V3hO', true);
-insert into users (id, username, password, enabled) values (3, 'moderator', '$2a$12$lHsk7GDy5mMbqz0FpWVsCOZCMCS7lZpsbGi/tJ5XvKe0ZOFoqdvRi', true);
-
-INSERT INTO roles (id, name) VALUES (1, 'ROLE_ADMIN');
-INSERT INTO roles (id, name) VALUES (2, 'ROLE_USER');
-INSERT INTO roles (id, name) VALUES (3, 'ROLE_MODERATOR');
-
-INSERT INTO USER_ROLES (USER_ID, ROLE_ID) VALUES (1, 1);
-INSERT INTO USER_ROLES (USER_ID, ROLE_ID) VALUES (2, 2);
-INSERT INTO USER_ROLES (USER_ID, ROLE_ID) VALUES (3, 3);
