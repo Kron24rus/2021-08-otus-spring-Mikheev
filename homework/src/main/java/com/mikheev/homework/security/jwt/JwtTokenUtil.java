@@ -29,7 +29,7 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public JwtUser getUserNameFromToken(String jwtToken) {
+    public JwtUser getJwtUserFromToken(String jwtToken) {
         Claims body = Jwts.parser().setSigningKey(jwtConfiguration.getSecret()).parseClaimsJws(jwtToken).getBody();
         String username = body.getSubject();
 

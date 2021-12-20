@@ -18,14 +18,15 @@ public class CommentController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'MODERATOR')")
     @PostMapping("/comment")
-    public Comment addComment(@RequestBody CommentDto commentDto) {
-        return commentService.addComment(commentDto.getBookId(), modelMapper.map(commentDto, Comment.class));
+    public CommentDto addComment(@RequestBody CommentDto commentDto) {
+        return modelMapper.map(commentService
+                .addComment(commentDto.getBookId(), modelMapper.map(commentDto, Comment.class)), CommentDto.class);
     }
 
     @PreAuthorize("hasRole('MODERATOR')")
     @PutMapping("/comment")
-    public Comment updateBook(@RequestBody Comment comment) {
-        return commentService.updateComment(comment);
+    public CommentDto updateBook(@RequestBody Comment comment) {
+        return modelMapper.map(commentService.updateComment(comment), CommentDto.class);
     }
 
     @PreAuthorize("hasRole('MODERATOR')")

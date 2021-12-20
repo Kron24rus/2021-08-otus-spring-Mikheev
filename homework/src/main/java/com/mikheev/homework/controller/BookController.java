@@ -1,7 +1,6 @@
 package com.mikheev.homework.controller;
 
-import com.mikheev.homework.controller.dto.BookDto;
-import com.mikheev.homework.controller.dto.BookListDto;
+import com.mikheev.homework.controller.dto.*;
 import com.mikheev.homework.domain.Author;
 import com.mikheev.homework.domain.Book;
 import com.mikheev.homework.domain.Genre;
@@ -42,25 +41,24 @@ public class BookController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @GetMapping("/associations")
-    public Map<String, Object> loadEditCreateAssociations() {
-        Map<String, Object> responseMap = new HashMap<>();
-        List<Author> authors = authorService.getAllAuthors();
-        List<Genre> genres = genreService.getAllGenres();
-        responseMap.put("authors", authors);
-        responseMap.put("genres", genres);
-        return responseMap;
+    public AssociationsDto loadEditCreateAssociations() {
+        List<AuthorDto> authors = authorService.getAllAuthors().stream()
+                .map(author -> modelMapper.map(author, AuthorDto.class)).collect(Collectors.toList());
+        List<GenreDto> genres = genreService.getAllGenres().stream()
+                .map(genre -> modelMapper.map(genre, GenreDto.class)).collect(Collectors.toList());
+        return new AssociationsDto(authors, genres);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PostMapping("/book")
-    public Book addBook(@RequestBody Book book) {
-        return bookService.addBook(book);
+    public BookDto addBook(@RequestBody Book book) {
+        return modelMapper.map(bookService.addBook(book), BookDto.class);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @PutMapping("/book")
-    public Book updateBook(@RequestBody Book book) {
-        return bookService.updateBook(book);
+    public BookDto updateBook(@RequestBody Book book) {
+        return modelMapper.map(bookService.updateBook(book), BookDto.class);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")

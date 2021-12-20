@@ -33,7 +33,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         if (jwtTokenUtil.validateJwtToken(jwtToken)) {
-            JwtUser jwtUser = jwtTokenUtil.getUserNameFromToken(jwtToken);
+            JwtUser jwtUser = jwtTokenUtil.getJwtUserFromToken(jwtToken);
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(
                             jwtUser.getUsername(),
