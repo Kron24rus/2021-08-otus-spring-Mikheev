@@ -20,8 +20,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <modelmapper.version>2.4.4</modelmapper.version>
-<!--        <spring.shell.version>2.0.1.RELEASE</spring.shell.version>-->
+        <spring.shell.version>2.0.1.RELEASE</spring.shell.version>
         <mongock.version>4.3.8</mongock.version>
     </properties>
 
@@ -64,12 +63,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>${modelmapper.version}</version>
         </dependency>
 
         <dependency>
