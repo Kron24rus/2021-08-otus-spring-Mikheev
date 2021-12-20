@@ -125,8 +125,8 @@
             getBook: function (bookId) {
                 this.loading = true;
                 apiService.getBook(bookId)
-                    .then(response => {
-                        this.book = response.data;
+                    .then(({data}) => {
+                        this.book = data;
                         this.loading = false;
                     })
             },

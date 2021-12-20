@@ -3,6 +3,7 @@ package com.mikheev.homework.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @ToString
@@ -25,5 +26,5 @@ public class RefreshToken {
     private String token;
 
     @Column(name = "EXPIRATION_DATE")
-    private Date expirationDate;
+    private ZonedDateTime expirationDate;
 }

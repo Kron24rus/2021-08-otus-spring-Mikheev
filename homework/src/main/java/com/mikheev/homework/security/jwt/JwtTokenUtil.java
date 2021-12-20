@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -15,9 +16,10 @@ public class JwtTokenUtil {
 
     private final JwtConfiguration jwtConfiguration;
 
-    public String generateJwtToken(String username) {
+    public String generateJwtToken(String username, List<String> roles) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("ROLES", roles)
                 .setIssuer(jwtConfiguration.getIssuer())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtConfiguration.getExpirationTime()))

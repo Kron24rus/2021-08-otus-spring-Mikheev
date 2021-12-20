@@ -63,9 +63,7 @@
         methods: {
             loadLibraryEntities: function () {
                 apiService.getEditLibraryEntities()
-                    .then(response => {
-                        this.libraryEntities = response.data;
-                    });
+                    .then(({data}) => this.libraryEntities = data);
             },
             saveBook: function () {
                 let bookToSave = Object.assign({}, this.bookModel);
@@ -73,9 +71,7 @@
                 bookToSave.author = this.selectedAuthor;
                 bookToSave.genre = this.selectedGenre;
                 apiService.saveUpdatedBook(bookToSave)
-                    .then(response => {
-                        this.$emit('bookSaved', response.data);
-                    });
+                    .then(({data}) => this.$emit('bookSaved', data));
             }
         }
     }

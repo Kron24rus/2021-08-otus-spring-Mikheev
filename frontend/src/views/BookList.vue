@@ -77,11 +77,10 @@
         methods: {
             getBookList: function () {
                 apiService.getBookList()
-                    .then(response => {
-                        this.books = response.data;
-                    }).catch(error => {
+                    .then( ({data}) => this.books = data)
+                    .catch(error => {
                     //todo: add error message
-                });
+                    });
             },
 
             createBook: function () {

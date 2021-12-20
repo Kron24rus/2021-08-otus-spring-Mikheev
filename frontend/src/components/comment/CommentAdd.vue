@@ -31,9 +31,7 @@
             addComment: function () {
                 let {text, bookId} = this;
                 apiService.addComment({text, bookId})
-                    .then(response => {
-                        this.$emit('commentAdded', response.data);
-                    });
+                    .then(({data}) => this.$emit('commentAdded', data));
             }
         }
     }

@@ -5,6 +5,7 @@ import com.mikheev.homework.controller.dto.LoginResponseDto;
 import com.mikheev.homework.controller.dto.RefreshRequestDto;
 import com.mikheev.homework.controller.dto.RefreshResponseDto;
 import com.mikheev.homework.domain.RefreshToken;
+import com.mikheev.homework.domain.Role;
 import com.mikheev.homework.domain.User;
 import com.mikheev.homework.exception.RefreshTokenException;
 import com.mikheev.homework.security.jwt.JwtTokenUtil;
@@ -43,13 +44,12 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String jwtToken = jwtTokenUtil.generateJwtToken(userDetails.getUsername());
-
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
-
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
+        String jwtToken = jwtTokenUtil.generateJwtToken(userDetails.getUsername(), roles);
+
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtToken)
@@ -66,7 +66,10 @@ public class AuthController {
         refreshTokenService.verifyRefreshToken(refreshToken);
 
         User user = refreshToken.getUser();
-        String jwtToken = jwtTokenUtil.generateJwtToken(user.getUsername());
+        List<String> roles = user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList());
+        String jwtToken = jwtTokenUtil.generateJwtToken(user.getUsername(), roles);
 
         return ResponseEntity.ok(new RefreshResponseDto(jwtToken, requestRefreshToken));
     }

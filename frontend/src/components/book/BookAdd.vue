@@ -50,16 +50,12 @@
         methods: {
             loadLibraryEntities: function () {
                 apiService.getEditLibraryEntities()
-                    .then(response => {
-                        this.libraryEntities = response.data;
-                    });
+                    .then(({data}) => this.libraryEntities = data);
             },
             addBook: function () {
                 let {title, author, genre} = this;
                 apiService.addBook({title, author, genre})
-                    .then(response => {
-                        this.$emit('bookAdded', response.data);
-                    });
+                    .then(({data}) => this.$emit('bookAdded', data));
             }
         }
     }

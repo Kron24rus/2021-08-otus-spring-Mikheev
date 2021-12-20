@@ -8,6 +8,9 @@ import com.mikheev.homework.security.jwt.JwtConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,7 +30,8 @@ public class RefreshTokenService {
     public RefreshToken createRefreshToken(String username) {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(userRepository.findByUsername(username));
-        refreshToken.setExpirationDate(new Date((new Date()).getTime() + jwtConfiguration.getRefreshExpirationTime()));
+        refreshToken.setExpirationDate(
+                ZonedDateTime.now().plus(jwtConfiguration.getRefreshExpirationTime(), ChronoUnit.MILLIS));
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken = refreshTokenRepository.save(refreshToken);
 
@@ -35,7 +39,7 @@ public class RefreshTokenService {
     }
 
     public void verifyRefreshToken(RefreshToken refreshToken) {
-        if (refreshToken.getExpirationDate().compareTo(new Date()) < 0) {
+        if (refreshToken.getExpirationDate().compareTo(ZonedDateTime.now()) < 0) {
             refreshTokenRepository.delete(refreshToken);
             throw new RefreshTokenException(refreshToken.getToken(), "Refresh token was expired");
         }

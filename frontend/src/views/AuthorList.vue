@@ -36,11 +36,10 @@
         methods: {
             getAuthorList: function () {
                 apiService.getAuthorList()
-                    .then(response => {
-                        this.authors = response.data;
-                    }).catch(error => {
-                    //todo: add error message
-                });
+                    .then(({data}) => this.authors = data)
+                    .catch(error => {
+                        //todo: add error message
+                    });
             }
         }
     }

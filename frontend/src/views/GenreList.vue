@@ -36,11 +36,10 @@
         methods: {
             getGenreList: function () {
                 apiService.getGenreList()
-                    .then(response => {
-                        this.genres = response.data;
-                    }).catch(error => {
-                    //todo: add error message
-                });
+                    .then(({data}) => this.genres = data)
+                    .catch(error => {
+                        //todo: add error message
+                    });
             }
         }
     }

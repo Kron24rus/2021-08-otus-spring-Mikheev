@@ -42,9 +42,7 @@
                 let commentToSave = Object.assign({}, this.commentModel);
                 commentToSave.text = this.commentText;
                 apiService.saveUpdatedComment(commentToSave)
-                    .then(response => {
-                        this.$emit('commentSaved', response.data);
-                    });
+                    .then(({data}) => this.$emit('commentSaved', data));
             }
         }
     }
