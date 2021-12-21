@@ -14,7 +14,6 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.data.MongoItemWriter;
@@ -41,7 +40,6 @@ public class JobConfiguration {
     public static final String MIGRATE_SQL_TO_MONGO_JOB = "migrateSqlToMongoJob";
     private static final int CHUNK_SIZE = 5;
 
-    @StepScope
     @Bean
     public RepositoryItemReader<Author> authorRepositoryItemReader() {
         RepositoryItemReader<Author> repositoryItemReader = new RepositoryItemReader<>();
@@ -52,7 +50,6 @@ public class JobConfiguration {
         return repositoryItemReader;
     }
 
-    @StepScope
     @Bean
     public MongoItemWriter<com.mikheev.homework.mongo.domain.Author> authorMongoItemWriter() {
         return new MongoItemWriterBuilder<com.mikheev.homework.mongo.domain.Author>()
@@ -61,7 +58,6 @@ public class JobConfiguration {
                 .build();
     }
 
-    @StepScope
     @Bean
     public ItemProcessor<Author, com.mikheev.homework.mongo.domain.Author> authorItemProcessor(MigrationService migrationService) {
         return migrationService::migrateAuthorEntity;
@@ -79,7 +75,6 @@ public class JobConfiguration {
                 .build();
     }
 
-    @StepScope
     @Bean
     public RepositoryItemReader<Genre> genreRepositoryItemReader() {
         RepositoryItemReader<Genre> repositoryItemReader = new RepositoryItemReader<>();
@@ -90,7 +85,6 @@ public class JobConfiguration {
         return repositoryItemReader;
     }
 
-    @StepScope
     @Bean
     public MongoItemWriter<com.mikheev.homework.mongo.domain.Genre> genreMongoItemWriter() {
         return new MongoItemWriterBuilder<com.mikheev.homework.mongo.domain.Genre>()
@@ -99,7 +93,6 @@ public class JobConfiguration {
                 .build();
     }
 
-    @StepScope
     @Bean
     public ItemProcessor<Genre, com.mikheev.homework.mongo.domain.Genre> genreItemProcessor(MigrationService migrationService) {
         return migrationService::migrateGenreEntity;
@@ -117,7 +110,6 @@ public class JobConfiguration {
                 .build();
     }
 
-    @StepScope
     @Bean
     public RepositoryItemReader<Book> bookRepositoryItemReader() {
         RepositoryItemReader<Book> repositoryItemReader = new RepositoryItemReader<>();
@@ -128,7 +120,6 @@ public class JobConfiguration {
         return repositoryItemReader;
     }
 
-    @StepScope
     @Bean
     public MongoItemWriter<com.mikheev.homework.mongo.domain.Book> bookMongoItemWriter() {
         return new MongoItemWriterBuilder<com.mikheev.homework.mongo.domain.Book>()
@@ -137,7 +128,6 @@ public class JobConfiguration {
                 .build();
     }
 
-    @StepScope
     @Bean
     public ItemProcessor<Book, com.mikheev.homework.mongo.domain.Book> bookItemProcessor(MigrationService migrationService) {
         return migrationService::migrateBookEntity;
@@ -155,7 +145,6 @@ public class JobConfiguration {
                 .build();
     }
 
-    @StepScope
     @Bean
     public RepositoryItemReader<Comment> commentRepositoryItemReader() {
         RepositoryItemReader<Comment> repositoryItemReader = new RepositoryItemReader<>();
@@ -166,7 +155,6 @@ public class JobConfiguration {
         return repositoryItemReader;
     }
 
-    @StepScope
     @Bean
     public MongoItemWriter<com.mikheev.homework.mongo.domain.Comment> commentMongoItemWriter() {
         return new MongoItemWriterBuilder<com.mikheev.homework.mongo.domain.Comment>()
@@ -175,7 +163,6 @@ public class JobConfiguration {
                 .build();
     }
 
-    @StepScope
     @Bean
     public ItemProcessor<Comment, com.mikheev.homework.mongo.domain.Comment> commentItemProcessor(MigrationService migrationService) {
         return migrationService::migrateCommentEntity;
