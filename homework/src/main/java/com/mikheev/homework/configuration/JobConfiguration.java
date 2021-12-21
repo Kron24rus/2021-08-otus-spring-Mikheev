@@ -15,6 +15,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.data.MongoItemWriter;
 import org.springframework.batch.item.data.RepositoryItemReader;
@@ -196,6 +197,7 @@ public class JobConfiguration {
     public Job migrateSqlToMongoJob(Step migrateAuthorEntityStep, Step migrateGenreEntityStep,
                                     Step migrateBookEntityStep, Step migrateCommentEntityStep) {
         return jobBuilderFactory.get(MIGRATE_SQL_TO_MONGO_JOB)
+                .incrementer(new RunIdIncrementer())
                 .flow(migrateAuthorEntityStep)
                 .next(migrateGenreEntityStep)
                 .next(migrateBookEntityStep)

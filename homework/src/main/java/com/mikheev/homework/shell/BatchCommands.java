@@ -11,6 +11,8 @@ import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
+import java.util.Date;
+
 @RequiredArgsConstructor
 @ShellComponent
 public class BatchCommands {
@@ -24,13 +26,15 @@ public class BatchCommands {
 
     @ShellMethod(value = "startMigrationJobWithJobLauncher", key = "sm-jl")
     public void startMigrationJobWithJobLauncher() throws Exception {
-        JobExecution execution = jobLauncher.run(migrateSqlToMongoJob, new JobParametersBuilder().toJobParameters());
+        JobExecution execution = jobLauncher.run(migrateSqlToMongoJob, new JobParametersBuilder(jobExplorer)
+                .getNextJobParameters(migrateSqlToMongoJob)
+                .toJobParameters());
         System.out.println(execution);
     }
 
     @ShellMethod(value = "startMigrationJobWithJobOperator", key = "sm-jo")
     public void startMigrationJobWithJobOperator() throws Exception {
-        Long executionId = jobOperator.start(JobConfiguration.MIGRATE_SQL_TO_MONGO_JOB, "");
+        Long executionId = jobOperator.start(JobConfiguration.MIGRATE_SQL_TO_MONGO_JOB, "date=" + new Date());
         System.out.println(jobOperator.getSummary(executionId));
     }
 
