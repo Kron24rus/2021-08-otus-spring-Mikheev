@@ -1,6 +1,5 @@
 package com.mikheev.homework.mongo.domain;
 
-import com.mikheev.homework.domain.Genre;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
