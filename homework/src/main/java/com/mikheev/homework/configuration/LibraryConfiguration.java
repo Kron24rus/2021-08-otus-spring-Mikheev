@@ -1,10 +1,7 @@
 package com.mikheev.homework.configuration;
 
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-import org.hibernate.collection.spi.PersistentCollection;
-import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +41,7 @@ public class LibraryConfiguration {
     private OncePerRequestFilter createRedirectFilter() {
         return new OncePerRequestFilter() {
             // Forwards all routes except '/index.html', '/api/library/', '/api/library/**' (caused by history API on frontend)
-            private final String REGEX = "(?!/api/library|/static|/index\\.html|/favicon\\.ico).*$";
+            private final String REGEX = "(?!/api/library|/static|/actuator|/datarest|/index\\.html|/favicon\\.ico).*$";
             private Pattern pattern = Pattern.compile(REGEX);
             @Override
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
