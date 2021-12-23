@@ -16,13 +16,14 @@ public class CommentController {
     private final ModelMapper modelMapper;
 
     @PostMapping("/comment")
-    public Comment addComment(@RequestBody CommentDto commentDto) {
-        return commentService.addComment(commentDto.getBookId(), modelMapper.map(commentDto, Comment.class));
+    public CommentDto addComment(@RequestBody CommentDto commentDto) {
+        return modelMapper.map(commentService
+                .addComment(commentDto.getBookId(), modelMapper.map(commentDto, Comment.class)), CommentDto.class);
     }
 
     @PutMapping("/comment")
-    public Comment updateBook(@RequestBody Comment comment) {
-        return commentService.updateComment(comment);
+    public CommentDto updateBook(@RequestBody Comment comment) {
+        return modelMapper.map(commentService.updateComment(comment), CommentDto.class);
     }
 
     @DeleteMapping("/comment/{id}")

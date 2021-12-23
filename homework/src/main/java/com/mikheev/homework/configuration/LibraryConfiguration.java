@@ -1,6 +1,5 @@
 package com.mikheev.homework.configuration;
 
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -21,11 +20,6 @@ public class LibraryConfiguration {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
-    }
-
-    @Bean
-    public Hibernate5Module hibernate5Module() {
-        return new Hibernate5Module();
     }
 
     @Bean
