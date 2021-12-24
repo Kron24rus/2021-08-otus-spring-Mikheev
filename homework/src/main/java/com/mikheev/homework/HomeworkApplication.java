@@ -1,12 +1,97 @@
 package com.mikheev.homework;
 
+import com.mikheev.homework.domain.Food;
+import com.mikheev.homework.domain.OrderItem;
+import com.mikheev.homework.messaging.Cafe;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.annotation.IntegrationComponentScan;
+import org.springframework.integration.channel.PublishSubscribeChannel;
+import org.springframework.integration.channel.QueueChannel;
+import org.springframework.integration.config.EnableIntegration;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.IntegrationFlows;
+import org.springframework.integration.dsl.MessageChannels;
+import org.springframework.integration.dsl.Pollers;
+import org.springframework.integration.scheduling.PollerMetadata;
 
-@SpringBootApplication
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Collectors;
+
+@IntegrationComponentScan
+@SuppressWarnings({"resource", "Duplicates"})
+@ComponentScan
+@Configuration
+@EnableIntegration
 public class HomeworkApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(HomeworkApplication.class, args);
+    private static final String[] MENU = { "coffee", "tea", "smoothie", "whiskey", "beer", "cola", "water" };
+
+    @Bean
+    public QueueChannel itemsChannel() {
+        return MessageChannels.queue( 10 ).get();
+    }
+
+    @Bean
+    public PublishSubscribeChannel foodChannel() {
+        return MessageChannels.publishSubscribe().get();
+    }
+
+    @Bean(name = PollerMetadata.DEFAULT_POLLER)
+    public PollerMetadata poller() {
+        return Pollers.fixedRate( 100 ).maxMessagesPerPoll( 2 ).get();
+    }
+
+    @Bean
+    public IntegrationFlow cafeFlow() {
+        return IntegrationFlows.from( "itemsChannel" )
+                .split()
+                .handle( "kitchenService", "cook" )
+                .aggregate()
+                .channel( "foodChannel" )
+                .get();
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(HomeworkApplication.class, args);
+
+        // here we works with cafe using interface
+        Cafe cafe = applicationContext.getBean( Cafe.class );
+
+        ForkJoinPool pool = ForkJoinPool.commonPool();
+
+        while ( true ) {
+            Thread.sleep( 7000 );
+
+            pool.execute( () -> {
+                Collection<OrderItem> items = generateOrderItems();
+                System.out.println( "New orderItems: " +
+                        items.stream().map( OrderItem::getItemName )
+                                .collect( Collectors.joining( "," ) ) );
+                Collection<Food> food = cafe.process( items );
+                System.out.println( "Ready food: " + food.stream()
+                        .map( Food::getName )
+                        .collect( Collectors.joining( "," ) ) );
+            } );
+        }
+    }
+
+    private static OrderItem generateOrderItem() {
+        return new OrderItem( MENU[ RandomUtils.nextInt( 0, MENU.length ) ] );
+    }
+
+    private static Collection<OrderItem> generateOrderItems() {
+        List<OrderItem> items = new ArrayList<>();
+        for ( int i = 0; i < RandomUtils.nextInt( 1, 5 ); ++ i ) {
+            items.add( generateOrderItem() );
+        }
+        return items;
     }
 }
