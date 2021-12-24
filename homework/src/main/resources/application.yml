@@ -17,6 +17,7 @@ spring:
 server:
   port: 8098
 
+
 management:
   endpoints:
     web:
@@ -31,3 +32,18 @@ management:
   info:
     git:
       mode: full
+
+info:
+  version: @project.version@
+  author: Alexander Mikheev
+  descriptiion: Library Application
+
+logging:
+  file:
+    name: library.log
+  level:
+    root: warn
+    org:
+      springframework:
+        web: debug
+      hibernate: info
