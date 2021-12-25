@@ -1,23 +1,22 @@
 package com.mikheev.homework;
 
-import com.mikheev.homework.domain.Food;
-import com.mikheev.homework.domain.OrderItem;
-import com.mikheev.homework.messaging.Cafe;
+import com.mikheev.homework.domain.Egg;
+import com.mikheev.homework.domain.Fish;
+import com.mikheev.homework.messaging.Lake;
+import com.mikheev.homework.service.GrowFishService;
+import com.mikheev.homework.service.LakeService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.IntegrationComponentScan;
-import org.springframework.integration.channel.PublishSubscribeChannel;
+import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.channel.QueueChannel;
-import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.MessageChannels;
-import org.springframework.integration.dsl.Pollers;
-import org.springframework.integration.scheduling.PollerMetadata;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,45 +24,38 @@ import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @IntegrationComponentScan
-@SuppressWarnings({"resource", "Duplicates"})
-@ComponentScan
-@Configuration
-@EnableIntegration
+@SpringBootApplication
 public class HomeworkApplication {
 
-    private static final String[] MENU = { "coffee", "tea", "smoothie", "whiskey", "beer", "cola", "water" };
+    private final GrowFishService growFishService;
+    private final LakeService lakeService;
 
     @Bean
-    public QueueChannel itemsChannel() {
-        return MessageChannels.queue( 10 ).get();
+    public QueueChannel eggsChannel() {
+        return MessageChannels.queue(10).get();
     }
 
     @Bean
-    public PublishSubscribeChannel foodChannel() {
-        return MessageChannels.publishSubscribe().get();
-    }
-
-    @Bean(name = PollerMetadata.DEFAULT_POLLER)
-    public PollerMetadata poller() {
-        return Pollers.fixedRate( 100 ).maxMessagesPerPoll( 2 ).get();
+    public DirectChannel fishChannel() {
+        return MessageChannels.direct().get();
     }
 
     @Bean
-    public IntegrationFlow cafeFlow() {
-        return IntegrationFlows.from( "itemsChannel" )
-                .split()
-                .handle( "kitchenService", "cook" )
-                .aggregate()
-                .channel( "foodChannel" )
+    public IntegrationFlow fishGrowFlow() {
+        return IntegrationFlows.from("eggsChannel")
+                .handle(lakeService, "eatRandomEgg")
+                .handle(growFishService, "hatch")
+                .handle(lakeService, "eatRandomFry")
+                .handle(growFishService, "grow")
+                .channel("fishChannel")
                 .get();
     }
 
     public static void main(String[] args) throws InterruptedException {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(HomeworkApplication.class, args);
-
-        // here we works with cafe using interface
-        Cafe cafe = applicationContext.getBean( Cafe.class );
+        Lake lake = applicationContext.getBean( Lake.class );
 
         ForkJoinPool pool = ForkJoinPool.commonPool();
 
@@ -71,27 +63,21 @@ public class HomeworkApplication {
             Thread.sleep( 7000 );
 
             pool.execute( () -> {
-                Collection<OrderItem> items = generateOrderItems();
-                System.out.println( "New orderItems: " +
-                        items.stream().map( OrderItem::getItemName )
-                                .collect( Collectors.joining( "," ) ) );
-                Collection<Food> food = cafe.process( items );
-                System.out.println( "Ready food: " + food.stream()
-                        .map( Food::getName )
-                        .collect( Collectors.joining( "," ) ) );
-            } );
+                Collection<Egg> eggs = generateEggs();
+                System.out.println("Generated Eggs: " + eggs.stream()
+                        .map(Egg::getId).collect(Collectors.toList()));
+                Collection<Fish> food = lake.process(eggs);
+                System.out.println("Survived Fish: " + food.stream()
+                        .map(Fish::getId).collect(Collectors.toList()));
+            });
         }
     }
 
-    private static OrderItem generateOrderItem() {
-        return new OrderItem( MENU[ RandomUtils.nextInt( 0, MENU.length ) ] );
-    }
-
-    private static Collection<OrderItem> generateOrderItems() {
-        List<OrderItem> items = new ArrayList<>();
-        for ( int i = 0; i < RandomUtils.nextInt( 1, 5 ); ++ i ) {
-            items.add( generateOrderItem() );
+    private static Collection<Egg> generateEggs() {
+        List<Egg> eggs = new ArrayList<>();
+        for (int i = 0; i < RandomUtils.nextInt(50, 100); i++) {
+            eggs.add(new Egg(i));
         }
-        return items;
+        return eggs;
     }
 }
