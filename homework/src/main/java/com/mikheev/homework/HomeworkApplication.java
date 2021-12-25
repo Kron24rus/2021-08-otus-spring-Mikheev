@@ -66,8 +66,8 @@ public class HomeworkApplication {
                 Collection<Egg> eggs = generateEggs();
                 System.out.println("Generated Eggs: " + eggs.stream()
                         .map(Egg::getId).collect(Collectors.toList()));
-                Collection<Fish> food = lake.process(eggs);
-                System.out.println("Survived Fish: " + food.stream()
+                Collection<Fish> fishes = lake.process(eggs);
+                System.out.println("Survived Fish: " + fishes.stream()
                         .map(Fish::getId).collect(Collectors.toList()));
             });
         }
