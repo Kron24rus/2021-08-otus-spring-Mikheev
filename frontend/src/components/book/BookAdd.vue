@@ -1,0 +1,62 @@
+<template>
+    <div class="col-12">
+        <div class="form-group">
+            <h1>Add book</h1>
+            <div>
+                <label for="holder-input">Title:</label>
+                <input id="holder-input" name="title" type="text"
+                       v-model="title"/>
+            </div>
+            <div>
+                <label for="authorSelect">Choose author:</label>
+                <select id="authorSelect" class="form-control"
+                        v-model="author">
+                    <option v-for="author in libraryEntities.authors"
+                            :value="author">{{ author.name }}
+                    </option>
+                </select>
+            </div>
+            <div>
+                <label for="genreSelect">Choose genre:</label>
+                <select id="genreSelect" class="form-control"
+                        v-model="genre">
+                    <option v-for="genre in libraryEntities.genres"
+                            :value="genre">{{ genre.name }}
+                    </option>
+                </select>
+            </div>
+            <button class="btn btn-primary"
+                    v-on:click="addBook()">Save
+            </button>
+        </div>
+    </div>
+</template>
+
+<script>
+    import apiService from '@/services/api-service';
+    export default {
+        name: "BookCreate",
+        data: function () {
+            return {
+                libraryEntities: {},
+                title: '',
+                author: {},
+                genre: {}
+            }
+        },
+        mounted: function () {
+            this.loadLibraryEntities();
+        },
+        methods: {
+            loadLibraryEntities: function () {
+                apiService.getEditLibraryEntities()
+                    .then(({data}) => this.libraryEntities = data);
+            },
+            addBook: function () {
+                let {title, author, genre} = this;
+                apiService.addBook({title, author, genre})
+                    .then(({data}) => this.$emit('bookAdded', data));
+            }
+        }
+    }
+</script>
