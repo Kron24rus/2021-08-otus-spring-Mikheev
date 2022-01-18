@@ -51,6 +51,10 @@
         </dependency>
 
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
@@ -84,6 +88,7 @@
     </dependencies>
 
     <build>
+        <finalName>book-library</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
