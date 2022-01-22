@@ -9,11 +9,15 @@ import com.mikheev.homework.repositories.AuthorRepository;
 import com.mikheev.homework.repositories.BookRepository;
 import com.mikheev.homework.repositories.GenreRepository;
 import com.mikheev.homework.service.BookService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.RollbackException;
 import java.util.List;
+import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
@@ -23,9 +27,15 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
 
+    @CircuitBreaker(name = "bookService")
+    @Retry(name = "bookService")
     @Transactional(readOnly = true)
     @Override
     public List<Book> getAllBooks() {
+        if (new Random().nextInt() % 2 == 0) {
+            System.out.println("rollback throw");
+            throw new RollbackException();
+        }
         return bookRepository.findAll();
     }
 

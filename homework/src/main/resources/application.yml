@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: book-library
   h2:
     console:
       enabled: true
@@ -25,3 +27,30 @@ jwt:
   issuer: libraryJwt
   expiration-time: 86400
   refresh-expiration-time: 172800
+resilience4j:
+  bulkhead:
+    instances:
+      bookService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        waitDurationInOpenState: 5s
+        slidingWindowType: COUNT_BASED
+
+  retry:
+    configs:
+      default:
+        maxAttempts: 5
+        waitDuration: 100
+      instances:
+        bookService:
+          baseConfig: default
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true

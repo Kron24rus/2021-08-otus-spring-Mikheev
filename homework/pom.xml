@@ -24,6 +24,8 @@
         <modelmapper.version>2.4.4</modelmapper.version>
         <jjwt.version>0.9.1</jjwt.version>
         <jackson.hibernate5.version>2.13.0</jackson.hibernate5.version>
+        <spring-cloud.version>2021.0.0</spring-cloud.version>
+        <hystrix-version>1.4.7.RELEASE</hystrix-version>
     </properties>
 
     <dependencies>
@@ -48,6 +50,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
         </dependency>
 
         <dependency>
@@ -86,6 +93,18 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-parent</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <finalName>book-library</finalName>
