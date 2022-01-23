@@ -7,6 +7,7 @@ import com.mikheev.homework.exception.NotFoundException;
 import com.mikheev.homework.repositories.BookRepository;
 import com.mikheev.homework.repositories.CommentRepository;
 import com.mikheev.homework.service.CommentService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final BookRepository bookRepository;
 
+    @CircuitBreaker(name = "commentService")
     @Transactional
     @Override
     public Comment addComment(long bookId, Comment comment) {
@@ -27,6 +29,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(comment);
     }
 
+    @CircuitBreaker(name = "commentService")
     @Transactional
     @Override
     public Comment updateComment(Comment comment) {
@@ -36,6 +39,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(databaseComment);
     }
 
+    @CircuitBreaker(name = "commentService")
     @Transactional
     @Override
     public void deleteComment(long commentId) {

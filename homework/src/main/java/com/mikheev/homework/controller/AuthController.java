@@ -11,6 +11,7 @@ import com.mikheev.homework.exception.RefreshTokenException;
 import com.mikheev.homework.security.jwt.JwtTokenUtil;
 import com.mikheev.homework.security.services.RefreshTokenService;
 import com.mikheev.homework.security.services.UserDetailsImpl;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ public class AuthController {
     private final JwtTokenUtil jwtTokenUtil;
     private final RefreshTokenService refreshTokenService;
 
+    @CircuitBreaker(name = "authController")
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDto loginRequestDto) {
         Authentication authentication = authenticationManager.authenticate(
@@ -56,6 +58,7 @@ public class AuthController {
                 .body(new LoginResponseDto(jwtToken, refreshToken.getToken(), userDetails.getUsername(), roles));
     }
 
+    @CircuitBreaker(name = "authController")
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshRequestDto refreshRequestDto) {
         String requestRefreshToken = refreshRequestDto.getRefreshToken();

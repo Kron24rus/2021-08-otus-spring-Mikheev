@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.RollbackException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -28,7 +29,7 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
 
     @CircuitBreaker(name = "bookService")
-    @Retry(name = "bookService")
+    @Retry(name = "bookService", fallbackMethod = "getEmptyBooksList")
     @Transactional(readOnly = true)
     @Override
     public List<Book> getAllBooks() {
@@ -39,7 +40,7 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll();
     }
 
-
+    @CircuitBreaker(name = "bookService")
     @Transactional(readOnly = true)
     @Override
     public Book getBookWithAllAssociations(long id) {
@@ -47,6 +48,7 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new NotFoundException("Book with id " + id + " not found!"));
     }
 
+    @CircuitBreaker(name = "bookService")
     @Transactional
     @Override
     public Book addBook(Book book) {
@@ -58,6 +60,7 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(bookToSave);
     }
 
+    @CircuitBreaker(name = "bookService")
     @Transactional
     @Override
     public Book updateBook(Book book) {
@@ -72,10 +75,14 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(databaseBook);
     }
 
-
+    @CircuitBreaker(name = "bookService")
     @Transactional
     @Override
     public void deleteBook(long id) {
         bookRepository.deleteById(id);
+    }
+
+    public List<Book> getEmptyBooksList(Exception e) {
+        return Collections.emptyList();
     }
 }
