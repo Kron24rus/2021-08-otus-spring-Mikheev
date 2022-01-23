@@ -1,0 +1,103 @@
+<template>
+    <book-add v-if="isCreateMode"
+              @bookAdded="updateBookList"></book-add>
+    <div v-else class="col-12">
+        <h1>Books</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Book page</th>
+                <th v-if="isAdmin || isModerator">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(book, index) in books" v-bind:key="index">
+                <td>{{ book.id }}</td>
+                <td>{{ book.title }}</td>
+                <td>
+                    <router-link :to="{ name: 'Book page', params: { id: book.id }}">Info</router-link>
+                </td>
+                <td v-if="isAdmin || isModerator">
+                    <button class="btn btn-primary"
+                            v-on:click="deleteBook(book.id)">Delete
+                    </button>
+                </td>
+            </tr>
+            <tr v-if="isAdmin || isModerator">
+                <td colspan="4">
+                    <a href="#" @click="createBook()">Add Book</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script>
+    import apiService from '@/services/api-service';
+    import BookAdd from '@/components/book/BookAdd.vue';
+
+    export default {
+        name: "BookList",
+
+        components: {
+            BookAdd
+        },
+
+        data: function () {
+            return {
+                isCreateMode: false,
+                books: [],
+                book: {}
+            }
+        },
+
+        computed: {
+            currentUser() {
+                return this.$store.state.auth.user;
+            },
+            isAdmin() {
+                if (this.currentUser && this.currentUser['roles']) {
+                    return this.currentUser['roles'].includes('ROLE_ADMIN');
+                }
+            },
+            isModerator() {
+                if (this.currentUser && this.currentUser['roles']) {
+                    return this.currentUser['roles'].includes('ROLE_MODERATOR');
+                }
+            }
+        },
+
+        mounted: function () {
+            this.getBookList();
+        },
+
+        methods: {
+            getBookList: function () {
+                apiService.getBookList()
+                    .then( ({data}) => this.books = data)
+                    .catch(error => {
+                    //todo: add error message
+                    });
+            },
+
+            createBook: function () {
+                this.isCreateMode = true;
+            },
+
+            updateBookList: function (addedBook) {
+                this.books.push(addedBook);
+                this.isCreateMode = false;
+            },
+
+            deleteBook: function (bookId) {
+                apiService.deleteBook(bookId)
+                    .then(() => {
+                        this.getBookList();
+                    });
+            }
+        }
+    }
+</script>

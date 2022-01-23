@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: book-library
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      data-locations: classpath:data-local.sql
+      schema-locations: classpath:schema.sql
+      mode: embedded
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+server:
+  port: 8098
+
+jwt:
+  secret: FfbEDyJ0s5qEqyMQyJ0u
+  issuer: libraryJwt
+  expiration-time: 86400
+  refresh-expiration-time: 172800
+
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        #wait in open state before perform 3 calls (half-open state) to check if backend up again
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        registerHealthIndicator: true
+    instances:
+      bookService:
+        baseConfig: default
+      genreService:
+        baseConfig: default
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 7s
+        slidingWindowType: TIME_BASED
+      authorServie:
+        baseConfig: default
+      commentService:
+        baseConfig: default
+      authController:
+        baseConfig: default
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 100
+      instances:
+        bookService:
+          baseConfig: default
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
