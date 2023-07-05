@@ -2,10 +2,12 @@ insert into genres (id, name) values (0, 'detective');
 insert into genres (id, name) values (1, 'comedy');
 insert into genres (id, name) values (2, 'criminal');
 insert into genres (id, name) values (3, 'fantasy');
+ALTER TABLE genres ALTER COLUMN ID RESTART WITH (SELECT MAX(ID) FROM genres) + 1;
 
 insert into authors (id, name) values (0, 'AuthorOfDetectiveAndComedy');
 insert into authors (id, name) values (1, 'TalentedAuthor');
 insert into authors (id, name) values (2, 'BadAndBoringAuthor');
+ALTER TABLE authors ALTER COLUMN ID RESTART WITH (SELECT MAX(ID) FROM authors) + 1;
 
 insert into books (id, title, author_id, genre_id) values (0, 'comedyBook', 0, 1);
 insert into books (id, title, author_id, genre_id) values (1, 'detectiveBook', 0, 0);
@@ -15,6 +17,7 @@ insert into books (id, title, author_id, genre_id) values (4, 'criminalBookOfBad
 insert into books (id, title, author_id, genre_id) values (5, 'criminalBookOfTalented', 1, 2);
 insert into books (id, title, author_id, genre_id) values (6, 'detectiveOfBadAuthor', 2, 0);
 insert into books (id, title, author_id, genre_id) values (7, 'comedyOfBoringAuthor', 2, 1);
+ALTER TABLE books ALTER COLUMN ID RESTART WITH (SELECT MAX(ID) FROM books) + 1;
 
 insert into comments (id, text, book_id) values (1, 'positive comment', 0);
 insert into comments (id, text, book_id) values (2, 'negative comment', 1);
@@ -45,3 +48,4 @@ insert into comments (id, text, book_id) values (26, 'negative comment', 4);
 insert into comments (id, text, book_id) values (27, 'neutral comment', 5);
 insert into comments (id, text, book_id) values (28, 'positive comment', 6);
 insert into comments (id, text, book_id) values (29, 'negative comment', 7);
+ALTER TABLE comments ALTER COLUMN ID RESTART WITH (SELECT MAX(ID) FROM comments) + 1;
